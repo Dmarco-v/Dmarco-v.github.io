@@ -2,48 +2,48 @@
 不断更新中~
 
 ## Java
-- [Java 基础](url)
-- [Java 面向对象](url)
-- [Java 集合](url)
-- [Java I/O](url)
-- [Java 并发](url)
-- [JVM](url)
-- [设计模式](url)
+1. [Java 基础](url)
+2. [Java 面向对象](url) 
+3. [Java 集合](url)
+4. [Java I/O](url)
+5. [Java 并发](url)
+6. [JVM](url)
+7. [设计模式](url)
 
 ## 数据结构与算法
-- [基础](url)
-- [剑指offer](url)
-- [LeetCode](url)
+1. [基础](url)
+2. [剑指offer](url)
+3. [LeetCode](url)
 
 ## 计算机网络
-- [计网](url)
-- [Http协议](url)
+1. [计网](url)
+2. [Http协议](url)
 
 ## 操作系统
-- [OS](url)
-- [Linux](url)
+1. [OS](url)
+2. [Linux](url)
 
 ## 数据库
-- [数据库系统原理](url)
-- [SQL语法](url)
-- [MySQL](url)
-- [Redis](url)
+1. [数据库系统原理](url)
+2. [SQL语法](url)
+3. [MySQL](url)
+4. [Redis](url)
 
 ## 常用框架
-- [Spring](url)
-- [SpringMVC](url)
-- [Mybatis](url)
-- [SpringBoot](url)
+1. [Spring](url)
+2. [SpringMVC](url)
+3. [Mybatis](url)
+4. [SpringBoot](url)
 
 ## 系统设计
-- [基础](url)
-- [分布式](url)
-- [缓存](url)
-- [消息队列](url)
+1. [基础](url)
+2. [分布式](url)
+3. [缓存](url)
+4. [消息队列](url)
 
 ## 常用工具
-- [Git](url)
-- [Maven](url)
-- [Docker](url)
+1. [Git](url)
+2. [Maven](url)
+3. [Docker](url)
 
 #### 转载文章请在开头明显处标明该页面地址。
