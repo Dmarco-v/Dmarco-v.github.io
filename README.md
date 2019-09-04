@@ -12,7 +12,7 @@
 
 ## 数据结构与算法
 1. [基础](url)
-2. [剑指offer](url)
+2. [剑指offer](数据结构与算法/剑指Offer.md)
 3. [LeetCode](url)
 
 ## 计算机网络
