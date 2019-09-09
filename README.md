@@ -2,7 +2,7 @@
 不断更新中~
 
 ## Java
-1. [Java 基础](url)
+1. [Java 基础](Java/Java基础.md)
 3. [Java 容器](url)
 4. [Java I/O](url)
 5. [Java 并发](url)
