@@ -1,5 +1,5 @@
-# Java知识总结
-不断更新中~
+# Dmarco-v的博客
+java开发技术总结，不定期更新~
 
 ## Java
 1. [Java 基础](Java/Java基础.md)
