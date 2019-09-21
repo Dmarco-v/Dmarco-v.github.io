@@ -3,7 +3,7 @@ java开发技术总结，不定期更新~
 
 ## Java
 1. [Java 基础](Java/Java基础.md)
-3. [Java 容器](url)
+3. [Java 容器](Java/Java容器.md)
 4. [Java I/O](url)
 5. [Java 并发](url)
 6. [JVM](url)
@@ -13,7 +13,7 @@ java开发技术总结，不定期更新~
 ## 数据结构与算法
 1. [基础](数据结构与算法/数据结构与算法基础.md)
 2. [剑指offer](数据结构与算法/剑指Offer.md)
-3. [LeetCode](url)
+3. [LeetCode](数据结构与算法/LeetCode.md)
 
 ## 计算机网络
 1. [计算机网络](计算机网络/计算机网络.md)
