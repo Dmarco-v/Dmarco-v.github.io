@@ -9,6 +9,7 @@
 - [搜索算法](#七搜索算法)
 - [动态规划](#八动态规划)
 - [递归](#九递归)
+- [位运算](#十位运算)
 
 <!-- GFM-TOC -->
 
@@ -1734,6 +1735,63 @@ class Solution {
 
 ### 七、搜索算法
 
+#### 1.BFS
+
+广度优先搜索是指对图进行逐层遍历，每一层都以上一层遍历的结果作为起点，遍历过的节点不能再被遍历。一般使用**队列**用来存储每一层遍历得到的节点，对遍历过的节点使用**标记**来防止重复遍历。
+
+使用BFS可以求解无权图的最短路径等**最优解**问题。
+
+##### 二叉树的锯齿形层次遍历#103
+
+描述：给定一个二叉树，返回其节点值的锯齿形层次遍历。（即先从左往右，再从右往左进行下一层遍历，以此类推，层与层之间交替进行）。
+
+思路：借助两个栈来实现奇偶层的轮流打印，一个整数用来标识层数。
+
+```java
+class Solution {
+    public List<List<Integer>> zigzagLevelOrder(TreeNode root) {
+        List<List<Integer>> res=new ArrayList<>();
+        if(root==null) return res;
+        int layer=1;
+        Stack <TreeNode> s1=new Stack<>();
+        Stack <TreeNode> s2=new Stack<>();
+        s1.add(root);
+        while(!s1.isEmpty() || !s2.isEmpty()){
+            if(layer%2==1){
+                List<Integer> list=new ArrayList<>();
+                while(!s1.isEmpty()){
+                    TreeNode node=s1.pop();
+                    if(node!=null) {
+                        list.add(node.val);
+                        s2.push(node.left);
+                        s2.push(node.right);
+                    }
+                }
+                if(!list.isEmpty()){
+                    res.add(list);
+                    layer++;
+                }
+            }else{
+                List<Integer> list=new ArrayList<>();
+                while(!s2.isEmpty()){
+                    TreeNode node=s2.pop();
+                    if(node!=null){
+                        list.add(node.val);
+                        s1.push(node.right);
+                        s1.push(node.left);
+                    }
+                }
+                if(!list.isEmpty()){
+                    res.add(list);
+                    layer++;
+                }
+            }
+        }
+        return res;
+    }
+}
+```
+
 
 
 
@@ -1785,6 +1843,8 @@ class Solution {
 
 
 
+
+### 十、位运算
 
 
 
