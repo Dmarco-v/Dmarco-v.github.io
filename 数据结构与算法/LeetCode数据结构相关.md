@@ -33,14 +33,35 @@ class Solution {
 
 #### 2.有序矩阵中第k小的元素#378
 
-描述：
+描述：给定一个 *n x n* 矩阵，其中每行和每列元素均按升序排序，找到矩阵中第k小的元素。
 
-思路：
+思路：二分查找。
 
 ```java
 class Solution {
     public int kthSmallest(int[][] matrix, int k) {
-        
+        int m=matrix.length,n=matrix[0].length;
+        int lo=matrix[0][0],hi=matrix[m-1][n-1];
+        while(lo<hi){
+            int mid=lo+(hi-lo)/2;
+            int count=countMid(matrix,mid,m,n);
+            if(count<k) lo=mid+1;
+            else hi=mid;//可能包括mid，因此high需要设置为mid
+        }
+        return lo;
+    }
+    private int countMid(int [][] matrix, int mid,int m,int n){
+        int r=0,c=n-1;
+        int count=0;
+        while(r<m && c>=0){
+            if(matrix[r][c]>mid){
+                c--;
+            }else{
+                count+=c+1;
+                r++;
+            }
+        }
+        return count;
     }
 }
 ```
