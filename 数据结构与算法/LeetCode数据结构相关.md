@@ -307,6 +307,116 @@ class Solution {
 
 ### 二、栈和队列
 
+#### 1.最小栈#155
+
+```java
+class MinStack {
+    private Stack<Integer> s;
+    private Stack<Integer> min;
+    public MinStack() {
+        s=new Stack<>();
+        min=new Stack<>();
+    }
+    public void push(int x) {
+        s.push(x);
+        if(min.isEmpty() || min.peek()>=x){
+            min.push(x);
+        }
+    }
+    public void pop() {
+        if(!s.isEmpty()){
+            int top=s.pop();//注意这个地方将s.pop()的值先赋给另一个数，比较时会自动装箱；而直接使用s.pop()==min.peek()比较的是两个Integer类型的对象，会返回false，需要改成使用equals()方法。
+            if(top==min.peek()){
+                min.pop();
+            }
+        }
+    }
+    public int top() {
+        if(!s.isEmpty()){
+            return s.peek();
+        }
+        throw new RuntimeException("栈中元素为空");
+    }
+    public int getMin() {
+        if(!min.isEmpty()){
+            return min.peek();
+        }
+        throw new RuntimeException("栈中元素为空");
+    }
+}
+```
+
+
+
+#### 2.用队列实现栈#225
+
+```java
+class MyStack {
+    private Queue<Integer>  queue;
+    public MyStack() {
+        queue=new LinkedList<>();
+    }
+    public void push(int x) {
+        queue.add(x);
+        int cnt=queue.size();
+        while(cnt>1){
+            queue.add(queue.poll());
+            cnt--;
+        }
+    }
+    public int pop() {
+        return queue.poll();
+    }
+    public int top() {
+        return queue.peek();
+    }
+    public boolean empty() {
+        return queue.isEmpty();
+    }
+}
+```
+
+
+
+#### 3.用栈实现队列#232
+
+```java
+class MyQueue {
+    private Stack<Integer> s1;
+    private Stack<Integer> s2;
+    public MyQueue() {
+        s1=new Stack<>();
+        s2=new Stack<>();
+    }
+    public void push(int x) {
+        while(!s2.isEmpty()){
+            s1.push(s2.pop());
+        }
+        s1.push(x);
+    }
+    public int pop() {
+        while(!s1.isEmpty()){
+            s2.push(s1.pop());
+        }
+        return s2.pop();
+    }
+    public int peek() {
+        while(!s1.isEmpty()){
+            s2.push(s1.pop());
+        }
+        return s2.peek();
+    }
+    public boolean empty() {
+        return s1.isEmpty() && s2.isEmpty();
+    }
+}
+
+```
+
+
+
+
+
 
 
 
