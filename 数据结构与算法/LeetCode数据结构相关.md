@@ -413,7 +413,29 @@ class MyQueue {
 
 ```
 
+#### 4.有效的括号#20
 
+描述：给定一个只包括 `'('`，`')'`，`'{'`，`'}'`，`'['`，`']'` 的字符串，判断字符串是否有效。
+
+##### 括号相关题目：#22，#32，#301
+
+```java
+class Solution {
+    public boolean isValid(String s) {
+        Stack<Integer> stack=new Stack<>();
+        for(char c:s.toCharArray()){
+            if(c =='('|| c=='{'||c=='['){
+                stack.push(c);
+            }else{
+                if(stack.isEmpty()) return false;
+                char peek=stack.pop();
+                if((c==')'&& peek!='(')|| (c=='}'&& peek!='{')|| (c==']'&& peek!='[') ) return false;
+            }
+        }
+        return stack.isEmpty();
+    }
+}
+```
 
 
 
