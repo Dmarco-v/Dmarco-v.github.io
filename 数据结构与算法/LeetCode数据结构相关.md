@@ -437,11 +437,120 @@ class Solution {
 }
 ```
 
+#### 5.移掉K位数字#402
 
+描述：给定一个以字符串表示的非负整数 *num*，移除这个数中的 *k* 位数字，使得剩下的数字最小。
 
+```java
+class Solution {
+    public String removeKdigits(String num, int k) {
+        //维护一个单调递增的栈
+        Stack <Character> stack=new Stack<>();
+        char[] cs=num.toCharArray();
+        int n=cs.length,m=n-k;
+        //遇到比栈顶元素小的，则将栈顶元素移除，直到k为0为止
+        for(char c:cs){
+            while(k>0 && !stack.isEmpty() && stack.peek()>c){
+                stack.pop();
+                k--;
+            }
+            stack.push(c);
+        }
+        //如果k不为空，则说明是一个单调递增的序列，将最后几位移除即可
+        while(k>0){
+            stack.pop();
+            k--;
+        }
+        int i=m-1;
+        //如果i<0说明栈中没有元素
+        if(i>=0){
+            while(i>=0){
+                cs[i--]=stack.pop();
+            }
+            //去除首部的0
+            for(i=0;i<m;i++){
+                if(cs[i]!='0') return String.valueOf(cs).substring(i,m);
+            }
+        }
+        return "0";
+    }
+}
+```
 
+#### 6.单调栈的应用：下一个更大元素#496，503，739
 
+#496 描述：给定两个没有重复元素的数组 nums1 和 nums2 ，其中nums1 是 nums2 的子集。找到 nums1 中每个元素在 nums2 中的下一个比其大的值。nums1 中数字 x 的下一个更大元素是指 x 在 nums2 中对应位置的右边的第一个比 x 大的元素。如果不存在，对应位置输出-1。
 
+思路：维护一个单调递减的栈，从数组的后面开始入栈（倒序入栈，出栈顺序为正序），如果栈顶元素比数组元素小，则出栈。对应位置上判断此时的栈是否为空，若为空，说明当前数的后面没有比他大的数；非空则返回栈顶元素。
+
+```java
+class Solution {
+    public int[] nextGreaterElement(int[] nums1, int[] nums2) {
+        Stack <Integer> s=new Stack<>();
+        int [] res=new int [nums1.length];
+        HashMap<Integer,Integer> map=new HashMap<>();
+        for(int i=nums2.length-1;i>=0;i--){
+            while(!s.isEmpty() && s.peek()<=nums2[i]){
+                s.pop();
+            }
+            int t=s.isEmpty() ? -1:s.peek();
+            map.put(nums2[i],t);
+            s.push(nums2[i]);
+        }
+        for(int i=0;i<nums1.length;i++){
+            res[i]=map.get(nums1[i]);
+        }
+        return res;
+    }
+}
+```
+
+#503 描述：将上题数组改为循环数组（即最后一个元素的下一个元素是数组的第一个元素）
+
+思路：因为是循环数组，因此需要遍历数组两次。
+
+```java
+class Solution {
+    public int[] nextGreaterElements(int[] nums) {
+        Stack<Integer> s=new Stack<>();
+        int n=nums.length;
+        int [] res=new int[n];
+        for(int i=2*n-1;i>=0;i--){
+            int num=nums[i%n];
+            while(!s.isEmpty() && s.peek()<=num){
+                s.pop();
+            }
+            int t=s.isEmpty()? -1:s.peek();
+            res[i%n]=t;
+            s.push(num);
+        }
+        return res;
+    }
+}
+```
+
+#739 描述：根据每日气温列表，请重新生成一个列表，对应位置的输入是你需要再等待多久温度才会升高超过该日的天数。如果之后都不会升高，请在该位置用 `0` 来代替。
+
+思路：本题求解的是下一个更大元素与当前元素的距离
+
+```java
+class Solution {
+    public int[] dailyTemperatures(int[] T) {
+        Stack<Integer> s=new Stack<>();
+        int n=T.length;
+        int[] res=new int[n];
+        for(int i=n-1;i>=0;i--){
+            while(!s.isEmpty() && T[s.peek()]<=T[i]){
+                s.pop();
+            }
+            int d=s.isEmpty()? 0:s.peek()-i;
+            res[i]=d;
+            s.push(i);
+        }
+        return res;
+    }
+}
+```
 
 
 
