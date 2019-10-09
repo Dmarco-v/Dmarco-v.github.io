@@ -555,6 +555,99 @@ class Solution {
 }
 ```
 
+#### 7.优先队列（堆）的应用#215，#347
+
+#215 数组中的第k大元素
+
+思路：维护一个包含最大的k个元素的小顶堆。时间复杂度为O(Nlogk)
+
+```java
+class Solution {
+    public int findKthLargest(int[] nums, int k) {
+        PriorityQueue<Integer> minHeap=new PriorityQueue<>();
+        for(int num:nums){
+            minHeap.offer(num);
+            if(minHeap.size()>k){
+                minHeap.poll();
+            }
+        }
+        return minHeap.peek();
+    }
+}
+```
+
+#347 前k个高频元素
+
+描述：给定一个非空整数数组，返回其中出现频率前k高的元素。
+
+思路：map存放元素出现的频率，对再出现频率进行堆排序。
+
+```java
+class Solution {
+    public List<Integer> topKFrequent(int[] nums, int k) {
+        HashMap<Integer,Integer> map=new HashMap<>();
+        for(int i=0;i<nums.length;i++){
+            if(map.containsKey(nums[i])){
+                map.put(nums[i],map.get(nums[i])+1);
+            }else map.put(nums[i],1);
+        }
+        PriorityQueue<Integer> minHeap=new PriorityQueue<>(new Comparator<Integer>(){
+            @Override
+            public int compare(Integer a,Integer b){
+                return map.get(a).compareTo(map.get(b));
+            }
+        });
+        for(int key:map.keySet()){
+            minHeap.offer(key);
+            if(minHeap.size()>k){
+                minHeap.poll();
+            }
+        }
+        List<Integer> res=new ArrayList<>();
+        while(!minHeap.isEmpty()){
+            res.add(minHeap.poll());
+        }
+        return res;
+    }
+}
+```
+
+#### 8.双端队列的应用#239
+
+描述：滑动窗口的最大值。给定一个数组 *nums*，有一个大小为 *k* 的滑动窗口从数组的最左侧移动到数组的最右侧。你只可以看到在滑动窗口内的 *k* 个数字。滑动窗口每次只向右移动一位。返回滑动窗口中的最大值。
+
+思路：使用双端队列保存滑动窗口中值的索引，队列中的索引对应的值时单调递减的。注意检查队首索引是否过期（在窗口外）。
+
+```java
+class Solution {
+    public int[] maxSlidingWindow(int[] nums, int k) {
+        if(k==0) return new int[]{};
+        Deque<Integer> queue=new LinkedList<>();
+        //初始窗口
+        for(int i=0;i<k;i++){
+            while(!queue.isEmpty() && nums[i]>nums[queue.peekLast()]){
+                queue.pollLast();
+            }
+            queue.add(i);
+        }
+        int [] res=new int [nums.length-k+1];
+        res[0]=nums[queue.peekFirst()];
+        for(int i=k;i<nums.length;i++){
+            //检查队首
+            if(!queue.isEmpty() && queue.peekFirst()<=i-k){
+                queue.pollFirst();
+            }
+            while(!queue.isEmpty() && nums[i]>nums[queue.peekLast()]){
+                queue.pollLast();
+            }
+            queue.add(i);
+            res[i-k+1]=nums[queue.peekFirst()];
+        }
+        return res;
+    }
+}
+```
+
 
 
 ### 三、链表
