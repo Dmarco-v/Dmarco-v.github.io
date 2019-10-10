@@ -652,6 +652,120 @@ class Solution {
 
 ### 三、链表
 
+#### 1.快慢指针法
+
+快慢指针常用于找链表中的环、找中点、某个节点等。
+
+#19删除链表的倒数第N个节点
+
+思路：快指针先走N步，然后慢指针从头开始和快指针一起走，快指针到头，此时的慢指针即为要删除的节点。
+
+```java
+class Solution {
+    public ListNode removeNthFromEnd(ListNode head, int n) {
+        ListNode fast=head;
+        while(n>0){
+            fast=fast.next;
+            n--;
+        }
+        if(fast==null) return head.next;
+        ListNode slow=head;
+        while(fast.next!=null){
+            fast=fast.next;
+            slow=slow.next;
+        }
+        slow.next=slow.next.next;
+        return head;
+    }
+}
+```
+
+#141判断链表是否有环
+
+思路：快指针2倍速，慢指针1倍，如果相遇，则有环。
+
+```java
+public class Solution {
+    public boolean hasCycle(ListNode head) {
+        if(head==null) return false;
+        ListNode fast=head;
+        ListNode slow=head;
+        while(fast!=null && fast.next!=null){
+            fast=fast.next.next;
+            slow=slow.next;
+            if(fast==slow) return true;
+        }
+        return false;
+    }
+}
+```
+
+#142找到环形链表入环的节点
+
+思路：找到快慢指针的汇合点，再让快指针回到起点，与慢指针同速走。
+
+```java
+public class Solution {
+    public ListNode detectCycle(ListNode head) {
+        if(head==null) return null;
+        ListNode fast=head;
+        ListNode slow=head;
+        while(true){
+            if(fast==null || fast.next==null) return null;
+            slow=slow.next;
+            fast=fast.next.next;
+            if(fast==slow) break;
+        }
+        fast=head;
+        while(fast!=slow){
+            fast=fast.next;
+            slow=slow.next;
+        }
+        return fast;
+    }
+}
+```
+
+#234判断回文链表
+
+思路：题目要求O（1）空间复杂度解决此题。三个步骤：
+
+- 快慢指针找到链表的中点
+- 翻转链表前半部分
+- 比较两部分是否相同
+
+```java
+class Solution {
+    public boolean isPalindrome(ListNode head) {
+        if(head==null) return true;
+        //快慢指针找中点
+        ListNode fast=head;
+        ListNode slow=head;
+        while(fast!=null && fast.next!=null){
+            fast=fast.next.next;
+            slow=slow.next;
+        }
+        //翻转链表前半部分
+        ListNode pre=null;
+        ListNode next=null;
+        while(head!=slow){
+            next=head.next;
+            head.next=pre;
+            pre=head;
+            head=next;
+        }
+        if(fast!=null) slow=slow.next;//如果是奇数个节点，则去掉中间的节点
+        //回文校验
+        while(pre!=null){
+            if(pre.val!=slow.val) return false;
+            pre=pre.next;
+            slow=slow.next;
+        }
+        return true;
+    }
+}
+```
+
 
 
 
