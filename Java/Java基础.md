@@ -201,7 +201,7 @@ static：
 
 - 本类是否有对应方法。this.func(this)
 - 没有则查找父类是否有对应方法。super.func(this)
-- 如果都没有，对参数转型成父类，再在本类中查找。this.func(this)
+- 如果都没有，对参数转型成父类，再在本类中查找。this.func(super)
 - 没有则查找父类是否有对应方法。super.func(super)
 
 ### 8. instanceof关键字
