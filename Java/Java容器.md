@@ -13,6 +13,28 @@
 
 Java中主要有Collection和Map两种容器，Collection是存储某种对象的集合，Map是存储两个对象形成的键值对（映射表）。
 
+### 0.Iterable和Iterator
+
+- Iterator是迭代器接口，此接口的实例可以对集合进行迭代遍历；Iterable是Collection接口的父接口。
+- Iterable接口中有一个成员是Iterator，只要实现了Iterable接口的类，就可使用Iterator迭代器。
+- Iterator中核心方法有next()（返回迭代器中的下一个值）,hasNext()（返回迭代器是否有下一个值）和remove()（从迭代器中移除迭代器返回的最后一个元素）
+
+```java
+List<Integer> list=new ArrayList<>();
+for (Integer integer : list) {
+    System.out.println(integer);
+}
+//上面的代码在编译时会自动变成
+List<Integer> list = new ArrayList();
+Iterator var3 = list.iterator();
+while(var3.hasNext()) {
+    Integer integer = (Integer)var3.next();
+    System.out.println(integer);
+}
+```
+
+
+
 ### 1.Collection
 
 <div align="center"> <img src="./pics/2Collection.png" width="600"/> </div><br>
@@ -161,6 +183,38 @@ private void writeObject(java.io.ObjectOutputStream s)
             throw new ConcurrentModificationException();
         }
     }
+```
+
+迭代时修改抛出异常示例：
+
+```java
+List<Integer> list = new ArrayList<>(Arrays.asList(1, 2, 3));
+Iterator<Integer> iterator = list.listIterator();
+while (iterator.hasNext()) {
+    Integer i = iterator.next();
+    if (i == 1) {
+        list.remove(i);
+    }
+}
+```
+
+抛出异常：
+
+```java
+Exception in thread "main" java.util.ConcurrentModificationException
+```
+
+如果需要迭代过程中修改，使用Iterator中提供的remove方法即可。原理是因为remove方法移除元素后可以将modCount重新赋值给expectedModCount，这样就不会抛出异常。
+
+```java
+List<Integer> list = new ArrayList<>(Arrays.asList(1, 2, 3));
+Iterator<Integer> iterator = list.listIterator();
+while (iterator.hasNext()) {
+    Integer i = iterator.next();
+    if (i == 1) {
+        iterator.remove();
+    }
+}
 ```
 
 ArrayList是线程不安全的，可以使用Collections.synchronizedList()方法获得一个线程安全的ArrayList，也可以使用concurrent并发包下的CopyOnWriteArrayList 类。
