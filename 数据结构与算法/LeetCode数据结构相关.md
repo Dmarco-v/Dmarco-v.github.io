@@ -652,7 +652,78 @@ class Solution {
 
 ### 三、链表
 
-#### 1.快慢指针法
+#### 1.链表反转
+
+#206翻转一个单链表
+
+递归：
+
+```java
+class Solution {
+    public ListNode reverseList(ListNode head) {
+        if(head==null ||head.next==null) return head;
+        ListNode next=head.next;
+        ListNode newHead=reverseList(next);
+        next.next=head;
+        head.next=null;
+        return newHead;
+    }
+}
+```
+
+迭代：
+
+```java
+class Solution {
+    public ListNode reverseList(ListNode head) {
+        if(head==null) return null;
+        ListNode pre=null;
+        ListNode next=null;
+        while(head!=null){
+            next=head.next;
+            head.next=pre;
+            pre=head;
+            head=next;
+        }
+        return pre;
+    }
+}
+```
+
+#92一趟扫描反转位置m到n的链表
+
+```java
+class Solution {
+    public ListNode reverseBetween(ListNode head, int m, int n) {
+        ListNode curNode=head,start=null;
+        while(m>1 ){
+            start=curNode;
+            curNode=curNode.next;
+            m--;
+            n--;
+        }
+        ListNode tail=curNode;
+        ListNode pre=null,next=null;
+        while(n>0){
+            next=curNode.next;
+            curNode.next=pre;
+            pre=curNode;
+            curNode=next;
+            n--;
+        }
+        //此时start为第m-1个节点，tail为第m个节点，pre为第n个节点，curNode为第n+1个节点
+        if(start==null){
+            head=pre;
+        }else start.next=pre;
+        tail.next=curNode;
+        return head;
+    }
+}
+```
+
+
+
+#### 2.快慢指针法
 
 快慢指针常用于找链表中的环、找中点、某个节点等。
 
@@ -765,6 +836,65 @@ class Solution {
     }
 }
 ```
+
+#### 3.链表的交点#160
+
+思路：要求时间复杂度O(N)，空间复杂度O(1)，如果没有交点则返回null。当链表A到达尾部时令其访问链表B，链表B到达尾部时令其访问链表A。有两种结果：存在交点，返回交点；不存在交点，两个指针最后都为null，返回null。
+
+```java
+public class Solution {
+    public ListNode getIntersectionNode(ListNode headA, ListNode headB) {
+        ListNode l1=headA,l2=headB;
+        while(l1!=l2){
+            l1=(l1==null)? headB:l1.next;
+            l2=(l2==null)? headA:l2.next;
+        }
+        return l1;
+    }
+}
+```
+
+如果只是判断链表是否有交点，只需比较两个链表的尾结点是否相等即可。
+
+#### 4.有序链表
+
+#21归并两个有序链表
+
+```java
+class Solution {
+    public ListNode mergeTwoLists(ListNode l1, ListNode l2) {
+        if(l1==null) return l2;
+        if(l2==null) return l1;
+        if(l1.val<l2.val){
+            l1.next=mergeTwoLists(l1.next,l2);
+            return l1;
+        }else{
+            l2.next=mergeTwoLists(l1,l2.next);
+            return l2;
+        }
+    }
+}
+```
+
+#83删除有序列表中的重复元素
+
+```java
+class Solution {
+    public ListNode deleteDuplicates(ListNode head) {
+        ListNode curNode=head;
+        while(curNode!=null && curNode.next!=null){
+            if(curNode.next.val==curNode.val){
+                curNode.next=curNode.next.next;
+            }else curNode=curNode.next;
+        }
+        return head;
+    }
+}
+```
+
+
+
+
 
 
 
