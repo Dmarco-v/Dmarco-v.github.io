@@ -1044,7 +1044,7 @@ class Solution {
         HashMap<Integer,Integer>  map=new HashMap<>();
         for(int i=0;i<nums.length;i++){
             if(map.containsKey(target-nums[i])){
-                return new int[]{map.get(target-nums[i]),i}''
+                return new int[]{map.get(target-nums[i]),i};
             }else{
                 map.put(nums[i],i);
             }
@@ -1056,27 +1056,49 @@ class Solution {
 
 也可以先对数组排序，然后用双指针或二分查找的方式，时间复杂度为O(NlogN)，空间复杂度为O(1)
 
-#### 3.布尔数组
+#### 3.整型数组-有效的字母异位词#242
 
+```java
+class Solution {
+    public boolean isAnagram(String s, String t) {
+        if(s.length()!=t.length()) return false;
+        int[] count=new int[26];
+        for(int i=0;i<s.length();i++){
+            count[s.charAt(i)-'a']++;
+            count[t.charAt(i)-'a']--;
+        }
+        for(int i=0;i<26;i++){
+            if(count[i]!=0){
+                return false;
+            }
+        }
+        return true;
+    }
+}
+```
 
+#### 4.最长连续序列#128
 
-
-
-#### 4.整型数组
-
-
-
-
-
-
-
-#### 3.
-
-
-
-
-
-
+```java
+class Solution {
+    public int longestConsecutive(int[] nums) {
+        HashSet<Integer> set=new HashSet<>();
+        for(int num:nums){
+            set.add(num);
+        }
+        int longest=0;
+        for(int num:nums){
+            if(set.contains(num-1)) continue;
+            int count=0;
+            while(set.contains(num++)){
+                count++;
+            }
+            longest=Math.max(longest,count);
+        }
+        return longest;
+    }
+}
+```
 
 
 
