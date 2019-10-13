@@ -892,17 +892,187 @@ class Solution {
 }
 ```
 
+#### 5.交换链表中的相邻节点#24
 
+描述：给定一个链表，两两交换其中相邻的节点，并返回交换后的链表。要求不能修改节点的值，空间复杂度O(1)
 
+思路：头插法。在头部新增一个null节点。
 
+```java
+class Solution {
+    public ListNode swapPairs(ListNode head) {
+        ListNode node=new ListNode(-1);
+        node.next=head;
+        ListNode pre=node;
+        while(pre.next!=null && pre.next.next!=null){
+            ListNode l1=pre.next,l2=pre.next.next;
+            ListNode next=l2.next;
+            l1.next=next;
+            l2.next=l1;
+            pre.next=l2;
+            pre=l1;
+        }
+        return node.next;
+    }
+}
+```
 
+#### 6.链表两数相加#445
 
+描述：给定两个**非空**链表来代表两个非负整数。数字最高位位于链表开始位置。它们的每个节点只存储单个数字。将这两数相加会返回一个新的链表。
 
+错误思路：将链表转成数字然后相加，再转成链表。测试发现Long型整数都不足够存储链表转成的数，因此不通过。
 
+正解：用栈保存链表中的数字，逐位相加，用一个整型变量存储进位。
+
+```java
+class Solution {
+    public ListNode addTwoNumbers(ListNode l1, ListNode l2){
+        Stack<Integer> s1=listToStack(l1);
+        Stack<Integer> s2=listToStack(l2);
+        ListNode head=new ListNode(-1);
+        int carry=0;
+        while(!s1.isEmpty()|| !s2.isEmpty()|| carry!=0){
+            int i1=s1.isEmpty()? 0:s1.pop();
+            int i2=s2.isEmpty()? 0:s2.pop();
+            int sum=i1+i2+carry;
+            ListNode node=new ListNode(sum%10);
+            node.next=head.next;
+            head.next=node;
+            carry=sum/10;
+        }
+        return head.next;
+    }
+    private Stack<Integer> listToStack(ListNode head){
+        Stack<Integer> s=new Stack<>();
+        while(head!=null){
+            s.push(head.val);
+            head=head.next;
+        }
+        return s;
+    }
+}
+```
+
+#### 7.分割链表#725
+
+描述：给定一个头结点为 `root` 的链表, 编写一个函数以将链表分隔为 `k` 个连续的部分。每部分的长度相差不超过1。前面部分的长度大于等于后面部分的长度。
+
+思路：n%k个长度为n/k+1链表，其余长度为n/k。
+
+```java
+class Solution {
+    public ListNode[] splitListToParts(ListNode root, int k) {
+        int n=0;
+        ListNode cur=root;
+        while(cur!=null){
+            cur=cur.next;
+            n++;
+        }
+        int mod=n%k,size=n/k;
+        ListNode[] ret=new ListNode[k];
+        cur=root;
+        for(int i=0;cur!=null && i<k;i++){
+            ret[i]=cur;
+            int curSize=mod>0 ? size+1:size;
+            mod--;
+            while(curSize>1){
+                cur=cur.next;
+                curSize--;
+            }
+            ListNode next=cur.next;
+            cur.next=null;
+            cur=next;
+        }
+        return ret;
+    }
+}
+```
+
+#### 8.奇偶链表#328
+
+描述：将一个单链表的所有奇数节点和偶数节点分别排在一起。
+
+```java
+class Solution {
+    public ListNode oddEvenList(ListNode head) {
+        if(head==null) return null;
+        ListNode odd=head,even=head.next,evenHead=even;
+        while(even!=null && even.next!=null){
+            odd.next=odd.next.next;
+            odd=odd.next;
+            even.next=even.next.next;
+            even=even.next;
+        }
+        odd.next=evenHead;
+        return head;
+    }
+}
+```
 
 
 
 ### 四、哈希表
+
+哈希表使用方法总结：
+
+- 使用哈希表的时间复杂度为O(1)，效率很高；空间复杂度为O(n)
+- HashSet用于存储一个集合，可以用于判断一个元素是否在集合中。如果元素有限，例如26个字母，可以用一个布尔数组来存储元素是否存在的信息，这样可以将空间复杂度下降到O(1)
+- HashMap用于建立映射关系。在对一个数据转换成另一种数据时，利用HashMap可以建立转换后的数据与之前的数据之间的关系。同样的，如果元素数量有限（例如数字范围为0-n），可以用数组来存储元素信息。
+
+#### 1.HashSet-判断重复元素#217
+
+```java
+class Solution {
+    public boolean containsDuplicate(int[] nums) {
+        HashSet<Integer> set=new HashSet<>();
+        for(int num:nums){
+            if(!set.contains(num)){
+                set.add(num);
+            }else return true;
+        }
+        return false;
+    }
+}
+```
+
+#### 2.HashMap-两数之和#1
+
+```java
+class Solution {
+    public int[] twoSum(int[] nums, int target) {
+        HashMap<Integer,Integer>  map=new HashMap<>();
+        for(int i=0;i<nums.length;i++){
+            if(map.containsKey(target-nums[i])){
+                return new int[]{map.get(target-nums[i]),i}''
+            }else{
+                map.put(nums[i],i);
+            }
+        }
+        return null;
+    }
+}
+```
+
+也可以先对数组排序，然后用双指针或二分查找的方式，时间复杂度为O(NlogN)，空间复杂度为O(1)
+
+#### 3.布尔数组
+
+
+
+
+
+#### 4.整型数组
+
+
+
+
+
+
+
+#### 3.
+
+
 
 
 
