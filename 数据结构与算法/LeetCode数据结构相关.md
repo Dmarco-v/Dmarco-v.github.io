@@ -425,7 +425,7 @@ class MyQueue {
 ```java
 class Solution {
     public boolean isValid(String s) {
-        Stack<Integer> stack=new Stack<>();
+        Stack<Character> stack=new Stack<>();
         for(char c:s.toCharArray()){
             if(c =='('|| c=='{'||c=='['){
                 stack.push(c);
@@ -1104,7 +1104,74 @@ class Solution {
 
 ### 五、字符串
 
-#### 1.
+#### 1.数字转换
+
+#8 字符串转换整数
+
+描述：请你来实现一个 `atoi` 函数，使其能将字符串转换成整数。
+
+思路：分三步完成。
+
+- 找到第一个非空字符。如果为数字，记录开始指针i；如果为正负号，用一个flag保存正负性，以i+1作为开始指针；如果为空格，continue，否则不是有效数组
+- 找到整数的结束指针。
+- 判断数字是否有溢出情况。
+
+```java
+class Solution {
+    public int myAtoi(String str) {
+        char[] cs=str.toCharArray();
+        int flag=1;
+        int i=0;
+        for(;i<cs.length;i++){
+            if(cs[i]>='0' && cs[i]<='9') break;
+            else if(cs[i]=='+' || cs[i]=='-'){
+                if(cs[i]=='-') flag=-1;
+                i++;
+                break;
+            }
+            else if(cs[i]!=' ') return 0;
+        }
+        int j=i;
+        for(;j<cs.length;j++){
+            if(cs[j]>'9'||cs[j]<'0')break;
+        }
+        int res=0;
+        for(int k=i;k<j;k++){
+            int temp=cs[k]-'0';
+            if(flag==1 && (res>Integer.MAX_VALUE/10 ||  (res==Integer.MAX_VALUE/10 && temp>7))) return Integer.MAX_VALUE;
+            if(flag==-1 && (flag*res<Integer.MIN_VALUE/10 ||  (flag*res==Integer.MIN_VALUE/10 && temp>8))) return Integer.MIN_VALUE;
+            res=res*10+temp;
+        }
+        return flag*res;
+    }
+}
+```
+
+此题的难点在于对边界条件的考察。
+
+#12 整数转罗马数字
+
+建立整数和罗马数字的映射表，先用尽量大的数字表示，再依次往后面添加较小的数字。
+
+```java
+class Solution {
+    public String intToRoman(int num) {
+        //可以用两个数组建立映射关系
+        int [] vals={1000,900,500,400,100,90,50,40,10,9,5,4,1};
+        String [] romans={"M", "CM", "D", "CD", "C", "XC", "L", "XL", "X", "IX", "V", "IV", "I"};
+        StringBuilder sb=new StringBuilder();
+        for(int i=0;i<vals.length;i++){
+            int temp=num/vals[i];
+            if(temp==0) continue;
+            for(int j=temp;j>0;j--){
+                sb.append(romans[i]);
+            }
+            num=num%vals[i];
+        }
+        return sb.toString();
+    }
+}
+```
 
 
 
