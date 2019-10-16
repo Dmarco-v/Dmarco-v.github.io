@@ -721,6 +721,36 @@ class Solution {
 }
 ```
 
+#61旋转链表
+
+描述：给定一个链表，旋转链表，将链表每个节点向右移动 *k* 个位置，其中 *k* 是非负数。
+
+```java
+class Solution {
+    public ListNode rotateRight(ListNode head, int k) {
+        if(head==null) return null;
+        //找链表长度和尾部节点
+        int n=1;
+        ListNode tail=head;
+        while(tail.next!=null){
+            tail=tail.next;
+            n++;
+        }
+        k=k%n;
+        if(head.next==null || k==0) return head;
+        //找到要断开的节点
+        ListNode newTail=head;
+        for(int i=0;i<n-k-1;i++){
+            newTail=newTail.next;
+        }
+        ListNode newHead=newTail.next;
+        tail.next=head;
+        newTail.next=null;
+        return newHead;
+    }
+}
+```
+
 
 
 #### 2.快慢指针法
@@ -1172,6 +1202,96 @@ class Solution {
     }
 }
 ```
+
+#### 2.回文字符串
+
+#9判断一个整数是否是回文数
+
+描述：要求不能将整数转为字符串来判断
+
+```java
+class Solution {
+    public boolean isPalindrome(int x) {
+        if(x==0) return true;
+        if(x<0||x%10==0) return false;
+        int right=0;
+        while(x>right){
+            right=right*10+x%10;
+            x/=10;
+        }
+        return x==right || x==right/10;
+    }
+}
+```
+
+
+
+#409字符集合组成最长回文串
+
+描述：给定一个包含大写字母和小写字母的字符串，找到通过这些字母构造成的最长的回文串。
+
+思路：用一个数组统计每个字母出现的次数。回文串中间的一个字符可以单独出现。
+
+```java
+class Solution {
+    public int longestPalindrome(String s) {
+        int [] counts=new int[128];
+        for(char c:s.toCharArray()){
+            counts[c]++;
+        }
+        int ret=0;
+        for(int count:counts){
+            ret+=count/2*2;
+        }
+        if(ret<s.length()) ret++;
+        return ret;
+    }
+}
+```
+
+
+
+#5最长回文子串
+
+思路：以一字母或两字母的回文字符串作为中心，向其两侧扩展。
+
+```java
+class Solution {
+    public String longestPalindrome(String s) {
+        if(s==null || s.length()<1) return "";
+        int start=0,end=0;
+        for(int i=0;i<s.length();i++){
+            int len1=expand(s,i,i);
+            int len2=expand(s,i,i+1);
+            int longest=Math.max(len1,len2);
+            if(longest>end-start+1){
+                start=i-(longest-1)/2;
+                end=i+longest/2;
+            }
+        }
+        return s.substring(start,end+1);//区间前闭后开
+    }
+    private int expand(String s,int left,int right){
+        while(left>=0 && right<s.length() && s.charAt(left)==s.charAt(right)){
+            left--;
+            right++;
+        }
+        return right-left-1;
+    }
+}
+```
+
+
+
+#516最长回文子序列
+
+
+
+#647回文子串的个数
+
+
+
+
 
 
 
