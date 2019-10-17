@@ -1283,17 +1283,65 @@ class Solution {
 
 
 
-#516最长回文子序列
-
-
-
 #647回文子串的个数
 
+描述：给定一个字符串，你的任务是计算这个字符串中有多少个回文子串。不同开始和结束位置的相同内容子串，计为不同子串。
+
+思路：类似于上一题。以某一位或两位为中心，扩展子串。
+
+```java
+class Solution {
+    private int count=0;
+    public int countSubstrings(String s) {
+        if(s==null||s.length()<1) return 0;
+        for(int i=0;i<s.length();i++){
+            expand(s,i,i);
+            expand(s,i,i+1);
+        }
+        return count;
+    }
+    private void expand(String s,int left, int right){
+        while(left>=0 && right<s.length() && s.charAt(left)==s.charAt(right)){
+            left--;
+            right++;
+            count++;
+        }
+    }
+}  
+```
 
 
 
+#516最长回文子序列的长度
 
+描述：给定一个字符串`s`，找到其中最长的回文子序列。可以假设`s`的最大长度为`1000`。
 
+思路：动态规划方法。四要素：
+
+- 状态：用f [i] [j]表示第i到j个字符组成的子串中，最长的回文子序列长度是多少。
+- 转移方程：如果字符i和j相同：f [i] [j] = f [i-1] [j+1]+2；如果不同：f [i] [j] = max（f [i+1] [j]，f [i] [j-1]）。遍历顺序i从后往前，j从i+1往后。
+- 初始化：f [i] [i] =1 单个字符
+- 结果：i=0，j=n-1
+
+```java
+class Solution {
+    public int longestPalindromeSubseq(String s) {
+        int n=s.length();
+        int[][] f=new int[n][n];
+        for(int i=n-1;i>=0;i--){
+            f[i][i]=1;
+            for(int j=i+1;j<n;j++){
+                if(s.charAt(i)==s.charAt(j)){
+                    f[i][j]=f[i+1][j-1]+2;
+                }else {
+                    f[i][j] = Math.max(f[i+1] [j],f[i][j-1]);
+                }
+            }
+        }
+        return f[0][n-1];
+    }
+}
+```
 
 
 
