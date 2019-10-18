@@ -1343,7 +1343,51 @@ class Solution {
 }
 ```
 
+#### 3.字符串同构#205
 
+描述：给定两个字符串 ***s*** 和 **t**，判断它们是否是同构的。
+
+思路：用长度128的整型数组统计s和t中每个字符上次出现的位置，如果位置相同，则属于同构。
+
+```java
+class Solution {
+    public boolean isIsomorphic(String s, String t) {
+        int [] indexOfS=new int[128];
+        int [] indexOfT=new int[128];
+        for(int i=0;i<s.length();i++){
+            int si=s.charAt(i),ti=t.charAt(i);
+            if(indexOfS[si]!=indexOfT[ti]) return false;
+            indexOfS[si]=i+1;//索引要从1开始计算，0为初始值
+            indexOfT[ti]=i+1;
+        }
+        return true;
+    }
+}
+```
+
+#### 4.计数二进制子串#696
+
+描述：给定一个字符串 `s`，计算具有相同数量0和1的非空(连续)子字符串的数量，并且这些子字符串中的所有0和所有1都是组合在一起的。
+
+思路：将字符串的连续字符分割成几组，相邻两组能组成的满足条件的子串数量为相邻两组长度的较小值。
+
+```java
+class Solution {
+    public int countBinarySubstrings(String s) {
+        int preLen=0,curLen=1,count=0;
+        for(int i=1;i<s.length();i++){
+            if(s.charAt(i)!=s.charAt(i-1)){
+                count+=Math.min(preLen,curLen);
+                preLen=curLen;
+                curLen=1;
+            }else {
+                curLen++;
+            }
+        }
+        return count+Math.min(preLen,curLen);
+    }
+}
+```
 
 
 
