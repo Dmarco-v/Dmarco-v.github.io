@@ -1393,6 +1393,128 @@ class Solution {
 
 ### 六、树
 
+#### 1.树的高度
+
+#104树的深度
+
+```java
+class Solution {
+    public int maxDepth(TreeNode root) {
+        if(root==null)return 0;
+        return Math.max(maxDepth(root.left),maxDepth(root.right))+1;
+    }
+}
+```
+
+#111二叉树的最小深度
+
+```java
+class Solution {
+    public int minDepth(TreeNode root) {
+        if(root==null) return 0;
+        int leftDepth=minDepth(root.left),rightDepth=minDepth(root.right);
+        if(root.left==null) return rightDepth+1;
+        if(root.right==null) return leftDepth+1;
+        return Math.min(rightDepth,leftDepth)+1;
+    }
+}
+```
+
+#110平衡树
+
+平衡树的左右子树高度差小于等于1
+
+```java
+class Solution {
+    public boolean isBalanced(TreeNode root) {
+        if(root==null)return true;
+        return Math.abs(maxDepth(root.left)-maxDepth(root.right))<=1 && isBalanced(root.left)&& isBalanced(root.right);
+    }
+    private int maxDepth(TreeNode root){
+        if(root==null)return 0;
+        return Math.max(maxDepth(root.left),maxDepth(root.right))+1;
+    }
+}
+```
+
+但这样自顶向下访问，会产生大量重复的节点访问和计算，最差的情况下时间复杂度为O(n^2)。可以改为自底向上的访问，只用遍历一次所有节点。如果从底部发现有子树不是平衡树的情况，则高度返回-1，从而节省了时间。
+
+```java
+class Solution {
+    public boolean isBalanced(TreeNode root) {
+        return maxDepth(root)!=-1;
+    }
+    private int maxDepth(TreeNode root){
+        if(root==null) return 0;
+        int left=maxDepth(root.left);
+        if(left==-1) return -1;
+        int right=maxDepth(root.right);
+        if(right==-1) return -1;
+        return Math.abs(left-right)<=1 ? Math.max(left,right)+1:-1;
+    }
+}
+```
+
+
+
+#### 2.相同、对称、翻转
+
+#100相同的树
+
+```java
+class Solution {
+    public boolean isSameTree(TreeNode p, TreeNode q) {
+        if(p==null) return q==null;
+        if(q==null) return false;
+        if(p.val!=q.val) return false;
+        return isSameTree(p.left,q.left) && isSameTree(p.right,q.right);
+    }
+}
+```
+
+#101对称二叉树
+
+```java
+class Solution {
+    public boolean isSymmetric(TreeNode root) {
+        return isMirror(root,root);
+    }
+    public boolean isMirror(TreeNode t1, TreeNode t2) {
+        if (t1 == null && t2 == null) return true;
+        if (t1 == null || t2 == null) return false;
+        return (t1.val == t2.val)
+            && isMirror(t1.right, t2.left)
+            && isMirror(t1.left, t2.right);
+    }
+}
+```
+
+迭代方法。用队列每次读取两个节点比较他们的值。每次入队时注意左右节点入队顺序相反
+
+```java
+class Solution {
+    public boolean isSymmetric(TreeNode root) {
+        Queue<TreeNode> queue=new LinkedList<>();
+        queue.add(root);
+        queue.add(root);
+        while(!queue.isEmpty()){
+            TreeNode t1=queue.poll();
+            TreeNode t2=queue.poll();
+            if(t1==null && t2==null) continue;
+            if(t1 == null || t2 == null ) return false;
+            if(t1.val!=t2.val) return false;
+            queue.add(t1.left);
+            queue.add(t2.right);
+            queue.add(t1.right);
+            queue.add(t2.left);
+        }
+        return true;
+    }
+}
+```
+
+
+
 
 
 
