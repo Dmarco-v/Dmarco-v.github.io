@@ -1,4 +1,4 @@
-<!-- GFM-TOC -->
+ <!-- GFM-TOC -->
 
 - [一、数组](#一数组)
 - [二、栈和队列](#二栈和队列)
@@ -1524,6 +1524,78 @@ class Solution {
         root.right=right;
         root.left=left;
         return root;
+    }
+}
+```
+
+#### 3.树的路径
+
+#112路径总和
+
+判断是否存在二叉树的路径和等于目标值
+
+```java
+class Solution {
+    public boolean hasPathSum(TreeNode root, int sum) {
+        if(root==null) return false;
+        if(root.left==null && root.right==null && root.val==sum) return true;
+        return hasPathSum(root.left,sum-root.val) || hasPathSum(root.right,sum-root.val);
+    }
+}
+```
+
+#113路径总和II
+
+找到所有路径总和等于目标值的路径。
+
+思路：DFS。
+
+```java
+class Solution {
+    public List<List<Integer>> pathSum(TreeNode root, int sum) {
+        List<List<Integer>> res=new ArrayList<>();
+        List<Integer> path=new ArrayList<>();
+        if(root!=null){
+            dfs(root,sum,res,path);
+        }
+        return res;
+    }
+    private void dfs(TreeNode root,int sum,List<List<Integer>> res,List<Integer> path){
+        path.add(root.val);
+        if(root.left==null && root.right==null && sum-root.val==0){
+            res.add(new ArrayList<Integer> (path));
+        }
+        if(root.left!=null){
+            dfs(root.left,sum-root.val,res,path);
+        }
+        if(root.right!=null){
+            dfs(root.right,sum-root.val,res,path);
+        }
+        path.remove(path.size()-1);
+    }
+}
+```
+
+#437路径总和III
+
+找出路径和等于给定数值的路径总数。路径方向必须向下，路径不需要从根节点开始，也不需要再叶节点结束。
+
+思路：写一个方法统计从某一节点开始的路径。
+
+```java
+class Solution {
+    public int pathSum(TreeNode root, int sum) {
+        if(root==null) return 0;
+        return pathSumStartWithRoot(root,sum)
+            +pathSum(root.left,sum)+pathSum(root.right,sum);
+    }
+    private int pathSumStartWithRoot(TreeNode root,int sum){
+        if(root==null) return 0;
+        int res=0;
+        if(root.val==sum) res++;
+        res+=pathSumStartWithRoot(root.left,sum-root.val)
+            +pathSumStartWithRoot(root.right,sum-root.val);
+        return res;
     }
 }
 ```
