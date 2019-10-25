@@ -1580,7 +1580,7 @@ class Solution {
 
 找出路径和等于给定数值的路径总数。路径方向必须向下，路径不需要从根节点开始，也不需要再叶节点结束。
 
-思路：写一个方法统计从某一节点开始的路径。
+思路：写一个方法统计从某一节点开始的路径的数量。
 
 ```java
 class Solution {
@@ -1600,7 +1600,28 @@ class Solution {
 }
 ```
 
+#543两节点的最长路径
 
+描述：给定一棵二叉树，你需要计算它的直径长度。一棵二叉树的直径长度是任意两个结点路径长度中的最大值。这条路径可能穿过根结点。
+
+思路：即求出左右子树深度相加的最大值
+
+```java
+class Solution {
+    private int max=0;
+    public int diameterOfBinaryTree(TreeNode root) {
+        depth(root);
+        return max;
+    }
+    private int depth(TreeNode root){
+        if(root==null) return 0;
+        int leftDepth=depth(root.left);
+        int rightDepth=depth(root.right);
+        max=Math.max(max,leftDepth+rightDepth);
+        return Math.max(leftDepth,rightDepth)+1;
+    }
+}
+```
 
 
 
