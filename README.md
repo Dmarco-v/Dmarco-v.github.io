@@ -29,15 +29,15 @@ java开发技术总结，不定期更新~
 3. [MySQL](url)
 4. [Redis](url)
 
-## 常用框架
-1. [Spring](url)
-2. [SpringMVC](url)
-3. [Mybatis](url)
-4. [SpringBoot](url)
+## 系统设计
+1. [系统设计基础](url)
+2. [分布式](url)
+3. [缓存](url)
+4. [消息队列](url)
 
-## 其他
+## 工具
 1. [Git](url)
 2. [Maven](url)
-3. [系统设计](url)
+3. 
 
 **转载文章请在开头明显处标明该页面地址。**
