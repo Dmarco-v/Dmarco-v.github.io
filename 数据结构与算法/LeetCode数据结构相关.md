@@ -1393,6 +1393,8 @@ class Solution {
 
 ###   六、树
 
+#### 6-1 递归
+
 #### 1.树的高度
 
 #104树的深度
@@ -1623,7 +1625,111 @@ class Solution {
 }
 ```
 
-#### 4.合并两个二叉树#617
+#### 4. House Robber
+
+不能同一晚上偷相邻的两间房屋。
+
+I.数组。动态规划。
+
+- 状态。f(k)表示从前k个房屋中能抢到的最大金额。Ai为第i个房屋的金钱。
+- 转移方程。f(k)=max( f(k-2)+Ak , f(k-1) )
+- 初始条件。f(1)=A1
+- 结果。f(n)
+
+```java
+class Solution {
+    public int rob(int[] nums) {
+        int preMax=0,curMax=0;
+        for(int a:nums){
+            int temp=curMax;
+            curMax=Math.max(preMax+a,curMax);
+            preMax=temp;
+        }
+        return curMax;
+    }
+}
+```
+
+II环形数组。第一个和最后一个不能同时偷，因此可分解为(0,n-1)和(1,n)两个子问题
+
+```java
+class Solution {
+    public int rob(int[] nums) {
+        int n=nums.length;
+        if(n==0) return 0;
+        if(n==1) return nums[0];
+        return Math.max(robCount(nums,0,n-1),robCount(nums,1,n));
+    }
+    private int robCount(int[] nums,int l,int r){
+        int preMax=0,curMax=0;
+        for(int i=l;i<r;i++){
+            int temp=curMax;
+            curMax=Math.max(preMax+nums[i],curMax);
+            preMax=temp;
+        }
+        return curMax;
+    }
+}
+```
+
+III二叉树。对于每个节点，有抢和不抢两种选择。如果抢了，那么就加上以其子节点的子节点为根抢劫得到的总金额；如果不抢，则总金额等于其两个子节点为根所抢到的总金额。比较两者的大小即可。
+
+```java
+class Solution {
+    public int rob(TreeNode root) {
+        if(root==null) return 0;
+        int val1=root.val;
+        if(root.left!=null) 
+            val1+=rob(root.left.left)+rob(root.left.right);
+        if(root.right!=null)
+            val1+=rob(root.right.left)+rob(root.right.right);
+        int val2=rob(root.left)+rob(root.right);
+        return Math.max(val1,val2);
+    }
+}
+```
+
+#### 5.左叶子之和#404
+
+```java
+class Solution {
+    public int sumOfLeftLeaves(TreeNode root) {
+        if(root==null) return 0;
+        if(isLeaf(root.left)) 
+            return root.left.val+sumOfLeftLeaves(root.right);
+        return sumOfLeftLeaves(root.left)
+            +sumOfLeftLeaves(root.right);
+    }
+    private boolean isLeaf(TreeNode root){
+        if(root==null) return false;
+        return root.left==null && root.right==null;
+    }
+}
+```
+
+#### 6.子树#572
+
+描述：判断一个树t是否是另一个树s的子树
+
+```java
+class Solution {
+    public boolean isSubtree(TreeNode s, TreeNode t) {
+        if(s==null) return false;
+        return isSubtreeWithRoot(s,t)
+            ||isSubtree(s.left,t)
+            ||isSubtree(s.right,t);
+    }
+    private boolean isSubTreeWithRoot(TreeNode s,TreeNode t){
+        if(t==null && s==null) return true;
+        if(t==null || s==null) return false;
+        if(t.val!=s.val) return false;
+        return isSubTreeWithRoot(s.left,t.left)
+            && isSubTreeWithRoot(s.right,t.right);
+    }
+}
+```
+
+#### 7.合并两个二叉树#617
 
 ```java
 class Solution {
@@ -1637,10 +1743,6 @@ class Solution {
     }
 }
 ```
-
-
-
-
 
 
 
