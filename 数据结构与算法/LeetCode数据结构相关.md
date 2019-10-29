@@ -1744,6 +1744,33 @@ class Solution {
 }
 ```
 
+#### 8.二叉树中第二小的节点#671
+
+描述：一个二叉树每个节点都是正数，且子节点数量只能为0或2，且此节点的值不大于其子节点的值。找出第二小的值，不存在返回-1
+
+思路：根节点一定是值最小的节点，只需要在子树中找到最小的值即可。因此该函数可以理解为求以root为根的子树中的最小值的函数。
+
+```java
+class Solution {
+    public int findSecondMinimumValue(TreeNode root) {
+        if(root==null) return -1;
+        if(root.left==null && root.right==null) return -1;
+        int leftMin=root.left.val;
+        if(leftMin==root.val) 
+            leftMin=findSecondMinimumValue(root.left);
+        int rightMin=root.right.val;
+        if(rightMin==root.val)
+            rightMin=findSecondMinimumValue(root.right);
+        if(leftMin!=-1 && rightMin!=-1) 
+            return Math.min(leftMin,rightMin);
+        if(leftMin!=-1) return leftMin;
+        return rightMin;
+    }
+}
+```
+
+
+
 
 
 
