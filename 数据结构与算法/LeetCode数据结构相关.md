@@ -1771,6 +1771,32 @@ class Solution {
 
 #### 6-2 层序遍历
 
+#102 二叉树的层次遍历
+
+```java
+class Solution {
+    public List<List<Integer>> levelOrder(TreeNode root) {
+        List<List<Integer>> res=new ArrayList<>();
+        if(root==null) return res;
+        Queue<TreeNode> queue=new LinkedList<>();
+        queue.add(root);
+        while(!queue.isEmpty()){
+            int len=queue.size();
+            List<Integer> layer=new ArrayList<>();
+            while(len>0){
+                TreeNode node=queue.poll();
+                layer.add(node.val);
+                len--;
+                if(node.left!=null) queue.offer(node.left);
+                if(node.right!=null) queue.offer(node.right);
+            }
+            res.add(layer);
+        }
+        return res;
+    }
+}
+```
+
 
 
 #### 6-3 前中后序遍历
@@ -1783,7 +1809,7 @@ class Solution {
 
 
 
-
+#### 3.非递归实现二叉树的后序遍历
 
 
 
