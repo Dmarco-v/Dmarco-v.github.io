@@ -1827,6 +1827,25 @@ class Solution {
 }
 ```
 
+#513左下角的节点
+
+找到最下层最左边的节点
+
+```java
+class Solution {
+    public int findBottomLeftValue(TreeNode root) {
+        Queue<TreeNode> queue=new LinkedList<>();
+        queue.add(root);
+        while(!queue.isEmpty()){
+            root=queue.poll();
+            if(root.right!=null) queue.add(root.right);
+            if(root.left!=null) queue.add(root.left);
+        }
+        return root.val;
+    }
+}
+```
+
 
 
 
@@ -1835,15 +1854,11 @@ class Solution {
 
 #### 6-3 前中后序遍历
 
-#### 1.非递归实现二叉树的前序遍历
+非递归实现二叉树的前序遍历
 
+非递归实现二叉树的中序遍历
 
-
-#### 2.非递归实现二叉树的中序遍历
-
-
-
-#### 3.非递归实现二叉树的后序遍历
+非递归实现二叉树的后序遍历
 
 
 
