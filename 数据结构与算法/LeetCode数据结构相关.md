@@ -1797,6 +1797,40 @@ class Solution {
 }
 ```
 
+#103 锯齿形层次遍历
+
+```java
+class Solution {
+    public List<List<Integer>> zigzagLevelOrder(TreeNode root) {
+        List<List<Integer>> res=new ArrayList<>();
+        if(root==null) return res;
+        Queue<TreeNode> queue=new LinkedList<>();
+        queue.add(root);
+        int level=1;
+        while(!queue.isEmpty()){
+            int len=queue.size();
+            List<Integer> layer=new LinkedList<>();
+            while(len>0){
+                TreeNode node=queue.poll();
+                if((level&1)==1){
+                    layer.add(node.val);
+                }else layer.add(0,node.val);
+                if(node.left!=null) queue.offer(node.left);
+                if(node.right!=null) queue.offer(node.right);
+                len--;
+            }
+            level++;
+            res.add(layer);
+        }
+        return res;
+    }
+}
+```
+
+
+
+
+
 
 
 #### 6-3 前中后序遍历
