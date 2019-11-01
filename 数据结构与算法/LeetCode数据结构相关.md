@@ -1829,7 +1829,7 @@ class Solution {
 
 #513左下角的节点
 
-找到最下层最左边的节点
+找到最下层最左边的节点。root不为null
 
 ```java
 class Solution {
@@ -1846,19 +1846,82 @@ class Solution {
 }
 ```
 
+#637二叉树每一层的平均值
 
-
-
-
-
+```java
+class Solution {
+    public List<Double> averageOfLevels(TreeNode root) {
+        List<Double> res=new ArrayList<>();
+        if(root==null) return res;
+        Queue<TreeNode> queue=new LinkedList<>();
+        queue.add(root);
+        while(!queue.isEmpty()){
+            int len=queue.size();
+            double sum=0;
+            for(int i=0;i<len;i++){
+                TreeNode node=queue.poll();
+                sum+=node.val;
+                if(node.left!=null)queue.add(node.left);
+                if(node.right!=null) queue.add(node.right);
+            }
+            res.add(sum/len);
+        }
+        return res;
+    }
+}
+```
 
 #### 6-3 前中后序遍历
 
-非递归实现二叉树的前序遍历
+递归版本：以前序遍历为例。中序和后序变更三个语句顺序即可。
 
-非递归实现二叉树的中序遍历
+```java
+class Solution {
+    public List<Integer> preorderTraversal(TreeNode root) {
+        List<Integer> res=new ArrayList<>();
+        preorder(root,res);
+        return res;
+    }
+    private void preorder(TreeNode root,List<Integer> res){
+        if(root==null) return ;
+        res.add(root.val);//1
+        preorder(root.left,res);//2
+        preorder(root.right,res);//3
+    }
+}
+```
 
-非递归实现二叉树的后序遍历
+#144 二叉树的前序遍历
+
+借助栈存储节点，每有一个节点出栈，就将其子节点入栈
+
+```java
+class Solution {
+    public List<Integer> preorderTraversal(TreeNode root) {
+        List<Integer> res=new ArrayList<>();
+        if(root==null) return res;
+        Stack<TreeNode> s=new Stack<>();
+        s.push(root);
+        while(!s.isEmpty()){
+            TreeNode node=s.pop();
+            res.add(node.val);
+            if(node.left!=null) s.push(node.left);
+            if(node.right!=null) s.push(node.right);
+        }
+        return res;
+    }
+}
+```
+
+#145 二叉树的后序遍历
+
+
+
+#94 二叉树的中序遍历
+
+
+
+
 
 
 
