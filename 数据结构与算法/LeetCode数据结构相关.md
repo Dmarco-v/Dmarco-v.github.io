@@ -1893,7 +1893,7 @@ class Solution {
 
 #144 二叉树的前序遍历
 
-借助栈存储节点，每有一个节点出栈，就将其子节点入栈
+借助栈存储节点，每有一个节点出栈，就将其子节点入栈。注意出栈顺序与入栈相反，因此入栈顺序先右后左。
 
 ```java
 class Solution {
@@ -1905,8 +1905,8 @@ class Solution {
         while(!s.isEmpty()){
             TreeNode node=s.pop();
             res.add(node.val);
-            if(node.left!=null) s.push(node.left);
             if(node.right!=null) s.push(node.right);
+            if(node.left!=null) s.push(node.left);
         }
         return res;
     }
