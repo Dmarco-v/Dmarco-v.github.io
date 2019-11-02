@@ -1915,9 +1915,49 @@ class Solution {
 
 #145 二叉树的后序遍历
 
+前序遍历的顺序是根左右，将左右顺序调换就是根右左，而后序是左右根，因此可以参考按照前序的思路，结束后翻转一下结果即可。
 
+```java
+class Solution {
+    public List<Integer> postorderTraversal(TreeNode root) {
+        List<Integer> res=new ArrayList<>();
+        if(root==null) return res;
+        Stack<TreeNode> s=new Stack<>();
+        s.push(root);
+        while(!s.isEmpty()){
+            TreeNode node=s.pop();
+            res.add(node.val);
+            if(node.left!=null) s.push(node.left);
+            if(node.right!=null) s.push(node.right);
+        }
+        Collections.reverse(res);
+        return res;
+    }
+}
+```
 
 #94 二叉树的中序遍历
+
+```java
+class Solution {
+    public List<Integer> inorderTraversal(TreeNode root) {
+        List<Integer> res=new ArrayList<>();
+        if(root==null) return res;
+        Stack<TreeNode> s=new Stack<>();
+        TreeNode cur=root;
+        while(cur!=null || !s.isEmpty()){
+            while(cur!=null){
+                s.push(cur);
+                cur=cur.left;
+            }
+            TreeNode node=s.pop();
+            res.add(node.val);
+            cur=node.right;
+        }
+        return res;
+    }
+}
+```
 
 
 
