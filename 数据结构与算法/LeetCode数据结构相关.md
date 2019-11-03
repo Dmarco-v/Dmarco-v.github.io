@@ -1395,7 +1395,7 @@ class Solution {
 
 #### 6-1 递归
 
-#### 1.树的高度
+##### 1.树的高度
 
 #104树的深度
 
@@ -1457,9 +1457,7 @@ class Solution {
 }
 ```
 
-
-
-#### 2.相同、对称、翻转
+##### 2.相同、对称、翻转
 
 #100相同的树
 
@@ -1530,7 +1528,7 @@ class Solution {
 }
 ```
 
-#### 3.树的路径
+##### 3.树的路径
 
 #112路径总和
 
@@ -1625,7 +1623,7 @@ class Solution {
 }
 ```
 
-#### 4. House Robber
+##### 4. House Robber
 
 不能同一晚上偷相邻的两间房屋。
 
@@ -1689,7 +1687,7 @@ class Solution {
 }
 ```
 
-#### 5.左叶子之和#404
+##### 5.左叶子之和#404
 
 ```java
 class Solution {
@@ -1707,7 +1705,7 @@ class Solution {
 }
 ```
 
-#### 6.子树#572
+##### 6.子树#572
 
 描述：判断一个树t是否是另一个树s的子树
 
@@ -1729,7 +1727,7 @@ class Solution {
 }
 ```
 
-#### 7.合并两个二叉树#617
+##### 7.合并两个二叉树#617
 
 ```java
 class Solution {
@@ -1744,7 +1742,7 @@ class Solution {
 }
 ```
 
-#### 8.二叉树中第二小的节点#671
+##### 8.二叉树中第二小的节点#671
 
 描述：一个二叉树每个节点都是正数，且子节点数量只能为0或2，且此节点的值不大于其子节点的值。找出第二小的值，不存在返回-1
 
@@ -1955,6 +1953,89 @@ class Solution {
             cur=node.right;
         }
         return res;
+    }
+}
+```
+
+#### 6-4 二叉搜索树BST
+
+二叉搜索树是指树的每个节点大于等于其左子树的所有节点，小于等于其右子树的所有节点。
+
+性质：二叉搜索树的中序遍历结果是一个有序数组
+
+##### 1.构建二叉搜索树
+
+#108将有序数组转换为二叉搜索树
+
+转换为一个高度平衡的BST。高度平衡是指左右子树高度差绝对值不超过1。
+
+思路：取数组的中间值为根节点
+
+```java
+class Solution {
+    public TreeNode sortedArrayToBST(int[] nums) {
+        return toBST(nums,0,nums.length-1);
+    }
+    private TreeNode toBST(int[] nums,int l,int r){
+        if(l>r) return null;
+        int mid=l+(r-l)/2;
+        TreeNode root=new TreeNode(nums[mid]);
+        root.left=toBST(nums,l,mid-1);
+        root.right=toBST(nums,mid+1,r);
+        return root;
+    }
+}
+```
+
+#109将有序链表转换为二叉搜索树
+
+思路：快慢指针找到链表的中点的前一个节点，并断开链表
+
+```java
+class Solution {
+    public TreeNode sortedListToBST(ListNode head) {
+        if(head==null) return null;
+        if(head.next==null) return new TreeNode(head.val);
+        ListNode preMid=findPreMid(head);
+        ListNode mid=preMid.next;
+        preMid.next=null;
+        TreeNode root=new TreeNode(mid.val);
+        root.left=sortedListToBST(head);
+        root.right=sortedListToBST(mid.next);
+        return root;
+    }
+    private ListNode findPreMid(ListNode head){
+        ListNode slow=head,fast=head;
+        ListNode pre=slow;
+        while(fast!=null && fast.next!=null){
+            pre=slow;
+            slow=slow.next;
+            fast=fast.next.next;
+        }
+        return pre;
+    }
+}
+```
+
+#669修剪二叉搜索树
+
+将二叉搜索树修剪为只保留值在L-R之间的节点。
+
+思路：三种情况
+
+- 如果root值比R大，则剪去根节点和右子树。
+- 如果root值比L小，则剪去根节点和左子树。
+- 如果root值在两者之间，则递归对左右子树进行修剪。
+
+```java
+class Solution {
+    public TreeNode trimBST(TreeNode root, int L, int R) {
+        if(root==null) return null;
+        if(root.val>R) return trimBST(root.left,L,R);
+        if(root.val<L) return trimBST(root.right,L,R);
+        root.left=trimBST(root.left,L,R);
+        root.right=trimBST(root.right,L,R);
+        return root;
     }
 }
 ```
