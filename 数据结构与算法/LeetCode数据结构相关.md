@@ -2040,6 +2040,47 @@ class Solution {
 }
 ```
 
+##### 2.最近公共祖先
+
+#235 BST的最近公共祖先
+
+一个节点也可以是自己的祖先。
+
+思路：最近公共祖先一定满足p和q两节点的值分居两侧。
+
+```java
+class Solution {
+    public TreeNode lowestCommonAncestor(TreeNode root, TreeNode p, TreeNode q) {
+        if(root.val>p.val && root.val>q.val){
+            return lowestCommonAncestor(root.left,p,q);
+        }
+        if(root.val<p.val && root.val<q.val){
+            return lowestCommonAncestor(root.right,p,q);
+        }
+        return root;
+    }
+}
+```
+
+#236 二叉树的最近公共祖先
+
+```java
+class Solution {
+    public TreeNode lowestCommonAncestor(TreeNode root, TreeNode p, TreeNode q) {
+        if(root==null || root==p || root==q) return root;
+        TreeNode left=lowestCommonAncestor(root.left,p,q);
+        TreeNode right=lowestCommonAncestor(root.right,p,q);
+        if(left==null) return right;
+        if(right==null) return left;
+        return root;
+    }
+}
+```
+
+
+
+
+
 
 
 
