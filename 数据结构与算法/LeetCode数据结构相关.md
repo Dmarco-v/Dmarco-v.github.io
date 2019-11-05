@@ -2077,9 +2077,30 @@ class Solution {
 }
 ```
 
+##### 3.查找
 
+#230 BST中第k小的元素
 
-
+```java
+class Solution {
+    private int cnt=0;
+    private int val;
+    public int kthSmallest(TreeNode root, int k) {
+        inorder(root,k);
+        return val;
+    }
+    private void inorder(TreeNode node,int k){
+        if(node==null) return;
+        inorder(node.left,k);
+        cnt++l
+        if(cnt==k){
+            val=node.val;
+            return;
+        }
+        inorder(node.right,k);
+    }
+}
+```
 
 
 
