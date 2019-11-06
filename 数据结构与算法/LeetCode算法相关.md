@@ -8,8 +8,6 @@
 - [数学题](#六数学题)
 - [搜索算法](#七搜索算法)
 - [动态规划](#八动态规划)
-- [递归](#九递归)
-- [位运算](#十位运算)
 
 <!-- GFM-TOC -->
 
@@ -690,6 +688,29 @@ class Solution {
             j--;
         }
         return true;
+    }
+}
+```
+
+#### 10.盛最多水的容器#11
+
+描述：给定 n 个非负整数 a1，a2，...，an，每个数代表坐标中的一个点 (i, ai) 。在坐标内画 n 条垂直线，垂直线 i 的两个端点分别为 (i, ai) 和 (i, 0)。找出其中的两条线，使得它们与 x 轴共同构成的容器可以容纳最多的水。
+
+思路：左右指针先拉到最大范围，然后移动较矮一端的指针。
+
+```java
+class Solution {
+    public int maxArea(int[] height) {
+        int l=0,r=height.length-1;
+        int res=0;
+        while(l<r){
+            int h=Math.min(height[l],height[r]);
+            res=Math.max(res,h*(r-l));
+            if(h==height[r]){
+                r--;
+            }else l++;
+        }
+        return res;
     }
 }
 ```
@@ -1829,22 +1850,6 @@ class Solution {
     }
 }
 ```
-
-
-
-
-
-
-
-
-
-### 九、递归
-
-
-
-
-
-### 十、位运算
 
 
 
