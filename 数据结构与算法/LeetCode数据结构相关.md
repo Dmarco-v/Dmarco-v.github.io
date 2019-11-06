@@ -2079,6 +2079,8 @@ class Solution {
 
 ##### 3.查找
 
+利用BST中数的大小关系。
+
 #230 BST中第k小的元素
 
 ```java
@@ -2102,7 +2104,119 @@ class Solution {
 }
 ```
 
-#
+#501 BST中的所有众数
+
+思路：中序遍历，如果一个数与前一个数相同，则该数的数量+1，否则换一个新的数。
+
+```java
+class Solution {
+    private int maxCnt=0;
+    private int thisCnt=0;
+    private List<Integer> modes=new ArrayList<>();
+    private TreeNode pre=null;
+    public int[] findMode(TreeNode root) {
+        inorder(root);
+        int length=modes.size();
+        int[] res=new int[length];
+        for(int i=0;i<length;i++){
+            res[i]=modes.get(i);
+        }
+        return res;
+    }
+    private void inorder(TreeNode node){
+        if(node==null) return ;
+        inorder(node.left);
+        if(pre!=null && pre.val==node.val){
+            thisCnt++;
+        }else thisCnt=1;
+        if(thisCnt==maxCnt){
+            modes.add(node.val);
+        }else if(thisCnt>maxCnt){
+            modes.clear();
+            maxCnt=thisCnt;
+            modes.add(node.val);
+        }
+        pre=node;
+        inorder(node.right);
+    }
+}
+```
+
+#530 BST的最小绝对差
+
+思路：利用BST中序遍历的性质，比较相邻两数的绝对差，找最小值
+
+```java
+class Solution {
+    private int minDiff=Integer.MAX_VALUE;
+    private TreeNode preNode=null;
+    public int getMinimumDifference(TreeNode root) {
+        inorder(root);
+        return minDiff;
+    }
+    private void inorder(TreeNode node){
+        if(node==null) return;
+        inorder(node.left);
+        if(preNode!=null){
+            minDiff=Math.min(minDiff,node.val-preNode.val);
+        }
+        preNode=node;
+        inorder(node.right);
+    }
+}
+```
+
+#538 将BST转为累加树
+
+描述：给定一个二叉搜索树（Binary Search Tree），把它转换成为累加树（Greater Tree)，使得每个节点的值是原来的节点值加上所有大于它的节点值之和。
+
+思路：最大的值出现在最右边，因此先遍历右子树，逐步递增地增加一个值
+
+```java
+class Solution {
+    private int sum=0;
+    public TreeNode convertBST(TreeNode root) {
+        traver(root);
+        return root;
+    }
+    private void traver(TreeNode node){
+        if(node==null) return;
+        traver(node.right);
+        sum+=node.val;
+        node.val=sum;
+        traver(node.left);
+    }
+}
+```
+
+#653 BST的两数之和
+
+思路：中序遍历得到有序数组后，用双指针对数组进行查找
+
+```java
+class Solution {
+    public boolean findTarget(TreeNode root, int k) {
+        List<Integer> nums=new ArrayList<>();
+        inorder(root,nums);
+        int i=0,j=nums.size()-1;
+        while(i<j){
+            int sum=nums.get(i)+nums.get(j);
+            if(sum==k) return true;
+            if(sum<k) i++;
+            else j--;
+        }
+        return false;
+    }
+    private void inorder(TreeNode node,List<Integer> nums){
+        if(node==null) return;
+        inorder(node.left,nums);
+        nums.add(node.val);
+        inorder(node.right,nums);
+    }
+}
+```
+
+
 
 
 
