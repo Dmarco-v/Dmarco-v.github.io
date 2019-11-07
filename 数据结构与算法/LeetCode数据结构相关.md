@@ -2216,6 +2216,39 @@ class Solution {
 }
 ```
 
+#### 6-5 Trie
+
+Trie前缀树，也称为字典树，用于判断字符串中是否存在或者是否具有某种字符串前缀。
+
+#208 实现Trie
+
+描述：实现一个Trie，包括insert，search，startsWith三个操作
+
+```java
+class Trie {
+
+    /** Initialize your data structure here. */
+    public Trie() {
+        
+    }
+    
+    /** Inserts a word into the trie. */
+    public void insert(String word) {
+        
+    }
+    
+    /** Returns if the word is in the trie. */
+    public boolean search(String word) {
+        
+    }
+    
+    /** Returns if there is any word in the trie that starts with the given prefix. */
+    public boolean startsWith(String prefix) {
+        
+    }
+}
+```
+
 
 
 
