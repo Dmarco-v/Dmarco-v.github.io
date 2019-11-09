@@ -2220,38 +2220,69 @@ class Solution {
 
 Trie前缀树，也称为字典树，用于判断字符串中是否存在或者是否具有某种字符串前缀。
 
+Trie与哈希表对比的优点：
+
+- 可找到具有同一前缀的全部键值
+- 按字典序枚举字符串的数据集
+- 在存储多个具有相同前缀的键值时可以节约空间
+
 #208 实现Trie
 
 描述：实现一个Trie，包括insert，search，startsWith三个操作
 
 ```java
 class Trie {
-
+    //定义字典树的数据结构
+    private class TrieNode{
+        TrieNode[] childs=new TrieNode[26];//存放一个节点的子节点
+        boolean isLeaf;//标识一个节点是不是叶节点
+    }
+    private TrieNode root=new TrieNode();
+    
     /** Initialize your data structure here. */
     public Trie() {
-        
     }
     
     /** Inserts a word into the trie. */
     public void insert(String word) {
-        
+        insert(root,word);
+    }
+    private void insert(TrieNode node,String word) {
+        if(node==null) return;
+        if(word.length()==0){
+            node.isLeaf=true;
+            return;
+        }
+        int index=word.charAt(0)-'a';
+        if(node.childs[index]==null){
+            node.childs[index]=new TrieNode();
+        }
+        insert(node.childs[index],word.substring(1));
     }
     
     /** Returns if the word is in the trie. */
     public boolean search(String word) {
-        
+        return search(root,word);
+    }
+    private boolean search(TrieNode node,String word) {
+        if (node == null) return false;
+        if (word.length() == 0) return node.isLeaf;
+        int index=word.charAt(0)-'a';
+        return search( node.childs[index],word.substring(1));
     }
     
     /** Returns if there is any word in the trie that starts with the given prefix. */
     public boolean startsWith(String prefix) {
-        
+        return startWith(root,prefix);
+    }
+    private boolean startWith(TrieNode node,String prefix) {
+        if (node == null) return false;
+        if (prefix.length() == 0) return true;
+        int index=prefix.charAt(0)-'a';
+        return startWith( node.childs[index],prefix.substring(1));
     }
 }
 ```
-
-
-
-
 
 
 
