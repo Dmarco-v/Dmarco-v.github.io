@@ -2237,10 +2237,11 @@ class Trie {
         TrieNode[] childs=new TrieNode[26];//存放一个节点的子节点
         boolean isLeaf;//标识一个节点是不是叶节点
     }
-    private TrieNode root=new TrieNode();
+    private TrieNode root;
     
     /** Initialize your data structure here. */
     public Trie() {
+        root=new TrieNode();
     }
     
     /** Inserts a word into the trie. */
@@ -2284,9 +2285,132 @@ class Trie {
 }
 ```
 
+#677 键值映射
+
+描述：实现一个 MapSum 类里的两个方法，insert 和 sum。
+
+- 对于方法 insert，你将得到一对（字符串，整数）的键值对。字符串表示键，整数表示值。如果键已经存在，那么原来的键值对将被替代成新的键值对。
+- 对于方法 sum，你将得到一个表示前缀的字符串，你需要返回所有以该前缀开头的键的值的总和。
+
+思路：参考字典树的构造方式。
+
+```java
+class MapSum {
+
+    private class TrieNode{
+        TrieNode[] childs=new TrieNode[26];
+        int val;
+    }
+    private TrieNode root;
+    
+    /** Initialize your data structure here. */
+    public MapSum() {
+        root=new TrieNode();
+    }
+    
+    public void insert(String key, int val) {
+        insert(key,val,root);
+    }
+    private void insert(String key,int val,TrieNode node){
+        if(node==null) return;
+        if(key.length()==0){
+            node.val=val;
+            return;
+        }
+        int index=key.charAt(0)-'a';
+        if(node.childs[index]==null){
+            node.childs[index]=new TrieNode();
+        }
+        insert(key.substring(1),val,node.childs[index]);
+    }
+    
+    public int sum(String prefix) {
+        return sum(prefix,root);
+    }
+    private int sum(String prefix,TrieNode node){
+        if(node==null) return 0;
+        if(prefix.length()==0){
+            int sum=node.val;
+            for(TrieNode child: node.childs){
+                sum+=sum(prefix,child);
+            }
+            return sum;
+        }
+        int index=prefix.charAt(0)-'a';
+        return sum(prefix.substring(1),node.childs[index]);
+    }
+}
+```
+
 
 
 ### 七、图
+
+#### 7.1二分图
+
+
+
+#### 7.2拓扑排序
+
+
+
+#### 7.3并查集
+
+并查集就是可以进行合并和查找根运算的集合。
+
+合并运算具体是：连通两个节点/合并两个元素所属的集合。
+
+查找根运算具体可以是：判断图中两个节点是否连通/两个元素是否同属一个集合。
+
+#684 冗余连接
+
+描述：一个连通的无向图，有N个节点和1条附加的边。返回一条不影响删除后使该图成为无环图的边。
+
+思路：借助并查集可以快速判断两个节点是否连通的特性。如果访问到一条边的两个节点已经连通，则该边可以删除。
+
+```java
+class Solution {
+    public int[] findRedundantConnection(int[][] edges) {
+        int N=edges.length;
+        UnionFind uf=new UnionFind(N);
+        for(int[]e:edges){
+            int u=e[0],v=e[1];
+            if(uf.isConnected(u,v)){
+                return e;
+            }
+            uf.union(u,v);
+        }
+        return new int[]{-1,-1};
+    }
+    private class UnionFind{
+        private int[] id;
+        UnionFind (int N){
+            id=new int[N+1];
+            for(int i=0;i<id.length;i++){
+                id[i]=i;
+            }
+        }
+        void union (int u,int v){
+            if(isConnected(u,v)) return;
+            int uID=find(u);
+            int vID=find(v);
+            for(int i=0;i<id.length;i++){
+                if(id[i]==uID){
+                    id[i]=vID;
+                }
+            }
+        }
+        //查找p所属的集合
+        int find(int p){
+            return id[p];
+        }
+        //判断两个节点是否连通
+        boolean isConnected(int u,int v){
+            return find(u)==find(v);
+        }
+    }
+}
+```
 
 
 
