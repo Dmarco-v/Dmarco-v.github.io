@@ -10,6 +10,8 @@
 
 <!-- GFM-TOC -->
 
+**注：本篇所有题目均来自[LeetCode](https://leetcode-cn.com)**
+
 ### 一、数组
 
 #### 1.删除有序数组中的重复项#26
@@ -2348,13 +2350,177 @@ class MapSum {
 
 #### 7.1二分图
 
+#785 判断二分图
+
+描述：如果我们能将一个图的节点集合分割成两个独立的子集A和B，并使图中的每一条边的两个节点一个来自A集合，一个来自B集合，我们就将这个图称为二分图。
+
+graph将会以邻接表方式给出，graph[i]表示图中与节点i相连的所有节点。每个节点都是一个在0到graph.length-1之间的整数。这图中没有自环和平行边： graph[i] 中不存在i，并且graph[i]中没有重复的值。
+
+思路：二分图问题可以转换成着色问题，可以用两种颜色对节点进行着色，如果可以保证相邻节点颜色不同，则这个图就是二分图。
+
+```java
+class Solution {
+    public boolean isBipartite(int[][] graph) {
+        int [] colors=new int[graph.length];
+        Arrays.fill(colors,-1);//-1代表还未染色，0和1是两种颜色
+        for(int i=0;i<graph.length;i++){
+            if(colors[i]==-1 && !BFS(i,0,colors,graph)){
+                return false;
+            }
+        }
+        return true;
+    }
+    /**
+     *用BFS判断按照当前节点和当前颜色进行染色的方案是否符合相邻节点颜色不同的条件。初始颜色0/1都可以。
+     */
+    private boolean BFS(int curNode,int curColor,int[]colors,int[][]graph){
+        if(colors[curNode]!=-1){
+            return colors[curNode]==curColor;
+        }
+        colors[curNode]=curColor;
+        //用BFS对邻接节点进行染色，如果染色结果不符，返回false
+        for(int nextNode:graph[curNode]){
+            if(!BFS(nextNode,1-curColor,colors,graph)) return false;
+        }
+        return true;
+    }
+}
+```
+
 
 
 #### 7.2拓扑排序
 
+拓扑排序是将有向无环图的节点排成一个线性序列，并且满足节点的先后顺序，常用于在具有先序关系的任务规划中。
+
+#207 课程表
+
+```java
+输入: 2, [[1,0],[0,1]]
+输出: false
+解释: 总共有 2 门课程。学习课程 1 之前，你需要先完成​课程 0；并且学习课程 0 之前，你还应先完成课程 1。这是不可能的。
+```
+
+描述：现在你总共有 *n* 门课需要选，记为 `0` 到 `n-1`。一门课可能需要有先修课程，判断给定的先修课程规定是否合法。
+
+思路：本题只需要检测有向图是否成环即可。用dfs进行遍历。时间复杂度O(E+V)，空间复杂度O(V)，E是边的条数，V是节点个数。
+
+```java
+public class Solution {
+    public boolean canFinish(int numCourses, int[][] prerequisites) {
+        if (numCourses <= 0) return false;
+        int plen = prerequisites.length;
+        if (plen == 0) return true;
+        int[] marked = new int[numCourses];
+        // 初始化有向图
+        HashSet<Integer>[] graph = new HashSet[numCourses];
+        for (int i = 0; i < numCourses; i++) {
+            graph[i] = new HashSet<>();
+        }
+        // 构建逆邻接矩阵，有向图的 key 是前驱结点，value 是后继结点的集合
+        for (int[] p : prerequisites) {
+            graph[p[1]].add(p[0]);
+        }
+        for (int i = 0; i < numCourses; i++) {
+            if (dfs(i, graph, marked)) return false;
+        }
+        return true;
+    }
+
+    /**
+     * dfs判断图中是否存在环
+     */
+    private boolean dfs(int i,HashSet<Integer>[] graph,int[] marked){
+        //如果在访问过程中又被访问到，则有环
+        if (marked[i] == 1) return true;
+        //如果该节点已被访问过，无需再访问，避免重复访问
+        if (marked[i] == 2) return false;
+        marked[i] = 1;
+        // 后继结点的集合
+        HashSet<Integer> successorNodes = graph[i];
+        for (Integer successor : successorNodes) {
+            if (dfs(successor, graph, marked)) {
+                return true;
+            }
+        }
+        marked[i] = 2;
+        return false;
+    }
+}
+```
+
+#210 课程表II
+
+描述：给出一个为学完所有课程所安排的学习顺序。如果不能，返回空数组。
+
+方法1：dfs。借助栈存放课程的拓扑排序结果。
+
+1. 构建邻接表
+2. 初始化栈S
+3. 对于图中的每个节点，都进行一次dfs，以防不连通的情况。
+4. 递归地遍历当前节点A的所有未被处理过的邻接节点。
+5. 当处理完所有的邻接节点后，将A入栈，此时以A为先修课程的节点均已入栈。
+6. 按出栈顺序依次返回节点元素。
+
+```java
+class Solution {
+    public int[] findOrder(int numCourses, int[][] prerequisites) {
+        if(numCourses<=0) return new int[0];
+        int plen=prerequisites.length;
+        //如果不存在依赖，则课程一定可以安排
+        if(plen==0){
+            int[] ret=new int[numCourses];
+            for(int i=0;i<numCourses;i++){
+                ret[i]=i;
+            }
+            return ret;
+        }
+        int [] marked=new int[numCourses];
+        //初始化有向图
+        HashSet<Integer> [] graph=new HashSet[numCourses];
+        for(int i=0;i<numCourses;i++){
+            graph[i]=new HashSet<>();
+        }
+        //构建逆邻接矩阵
+        for(int [] p:prerequisites){
+            graph[p[1]].add(p[0]);
+        }
+        //初始化栈
+        Stack<Integer> stack=new Stack<>();
+        //dfs判断是否有环并将节点按顺序入栈
+        for(int i=0;i<numCourses;i++){
+            if(dfs(i,graph,marked,stack)){
+                return new int[0];
+            }
+        }
+        int [] ret=new int[numCourses];
+        for(int i=0;i<numCourses;i++){
+            ret[i]=stack.pop();
+        }
+        return ret;
+    }
+    
+    private boolean dfs(int i,HashSet<Integer>[] graph,int[] marked,Stack<Integer> stack){
+        if(marked[i]==1) return true;
+        if(marked[i]==2) return false;
+        marked[i]=1;
+        HashSet<Integer> successorNodes=graph[i];
+        for(Integer successor:successorNodes){
+            if(dfs(successor,graph,marked,stack)){
+                return true;
+            }
+        }
+        //如果一个节点的后继节点访问结束后没有环，则该节点可以被标记为已访问，并可以入栈。
+        marked[i]=2;
+        stack.add(i);
+        return false;
+    }
+}
+```
 
 
-#### 7.3并查集
+
+#### 7.4并查集
 
 并查集就是可以进行合并和查找根运算的集合。
 
