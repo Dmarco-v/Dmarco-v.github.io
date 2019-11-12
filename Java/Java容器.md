@@ -155,7 +155,57 @@ ArrayList删除元素需要调用System.arraycopy()方法将从index+1开始后�
     }
 ```
 
-#### 1.4线程安全
+#### 1.4拷贝
+
+ArrayList的clone实现，是通过数组元素拷贝来实现的深拷贝。
+
+```java
+public Object clone() {
+    try {
+        ArrayList<?> v = (ArrayList<?>) super.clone();
+        v.elementData = Arrays.copyOf(elementData, size);
+        v.modCount = 0;
+        return v;
+    } catch (CloneNotSupportedException e) {
+        // this shouldn't happen, since we are Cloneable
+        throw new InternalError(e);
+    }
+}
+```
+
+#### 1.5序列化
+
+ArrayList实现了Serializable接口，说明是可以被序列化的，但是elementData数组又被transient关键字修饰（即不参与序列化过程），存在矛盾。
+
+```java
+private void readObject(java.io.ObjectInputStream s)
+    throws java.io.IOException, ClassNotFoundException {
+    elementData = EMPTY_ELEMENTDATA;
+
+    // Read in size, and any hidden stuff
+    s.defaultReadObject();
+
+    // Read in capacity
+    s.readInt(); // ignored
+
+    if (size > 0) {
+        // be like clone(), allocate array based upon size not capacity
+        ensureCapacityInternal(size);
+
+        Object[] a = elementData;
+        // Read in all elements in the proper order.
+        for (int i=0; i<size; i++) {
+            a[i] = s.readObject();
+        }
+    }
+}
+```
+
+实际上，ArrayList重写了readObject和writeObject来自定义的序列化和反序列化策略。自定义的方法通过遍历elementData数组中的数据来将元素写入ObjectInputStream 和ObjectOutputStream。这样只对数组中的有效元素进行了序列化，而null的部分没有。从而减少了开销。
+
+
+
+#### 1.6线程安全.fail-fast与fail-safe
 
 fail-fast（快速失败）与fail-safe（安全失败）
 
@@ -225,7 +275,7 @@ List<String> synList=Collections.synchronizedList(list);
 List<String> cowList=new CopyOnWriteArrayList<>();
 ```
 
-#### 1.5CopyOnWriteArrayList
+#### 1.7CopyOnWriteArrayList
 
 读写分离的实现：
 
@@ -254,6 +304,18 @@ final void setArray(Object[] a) {
 ```
 
 CopyOnWriteArrayList可在写操作的同时允许读操作，适合读多写少的情景。但是内存开销较大，且不能实时地读取数据，不适合内存约束和有实时性要求的情景。
+
+#### 1.8其他
+
+ArrayList与数组的相互转化：
+
+```java
+Integer [] a=new Integer []{1,2,3};
+List<Integer> list= new ArrayList<>(Arrays.asList(a));
+Integer [] b= (Integer[]) list.toArray();
+```
+
+
 
 ### 2.LinkedList
 
@@ -285,6 +347,13 @@ private static class Node<E> {
 
 注：LinkedList类中还存储了first和last两个指针用来存储头指针和尾指针。
 
+```java
+transient Node<E> first;
+transient Node<E> last;
+```
+
+
+
 #### 2.3ArrayList和LinkedList的区别
 
 - 底层实现：动态数组/双向链表
@@ -294,6 +363,63 @@ private static class Node<E> {
 
 
 ### 3.HashMap
+
+**HashMap的整体实现**
+
+HashMap是由哈希表来实现的，即数组+链表的方式实现，通过key的hash值与数组长度取余来获得插入数组的下标（桶坐标），如果产生哈希冲突，在该下标位置转为链表。jdk1.8以后，当链表长度到达8并且数组长度大于等于64则转为红黑树。
+
+#### 3.1 字段
+
+HashMap主要包含以下几个字段
+
+```java
+transient Node<K,V>[] table;//Node数组
+transient int size;
+transient int modCount;
+int threshold;//最大键值对个数
+final float loadFactor;//负载因子，默认0.75
+```
+
+table字段是一个Node数组，初始默认大小是16。Node是HashMap的一个内部类，实现了Map.Entry类，存储了键值对信息。Node类中还包含next字段，可以看出每个Node都是一个链表。
+
+```java
+static class Node<K,V> implements Map.Entry<K,V> {
+        final int hash;    //用来定位数组索引位置
+        final K key;
+        V value;
+        Node<K,V> next;   //链表的下一个node
+
+        Node(int hash, K key, V value, Node<K,V> next) { ... }
+        public final K getKey(){ ... }
+        public final V getValue() { ... }
+        public final String toString() { ... }
+        public final int hashCode() { ... }
+        public final V setValue(V newValue) { ... }
+        public final boolean equals(Object o) { ... }
+}
+```
+
+size字段是HashMap中实际存在的键值对数量
+
+modCount字段记录内部结构发生变化的次数，用于迭代器中的快速失败。当put新的键值对时，结构发生变化，但覆盖某个key对应的value值不算。
+
+threshold字段是指HashMap所能容纳的最大键值对个数。threshold=loadFactor*length。超过这个数目就需要resize（扩容）扩容后的HashMap的容量是之前的两倍。
+
+loadFactor是负载因子。默认0.75，越大说明允许存储的键值对个数越多。默认0.75是对时间和空间效率的一个平衡选择。
+
+#### 3.2确定桶下标
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
