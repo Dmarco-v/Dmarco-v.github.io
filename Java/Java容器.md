@@ -668,5 +668,11 @@ JDK 1.8 使用了 CAS （比较并交换）操作来支持更高的并发度，�
 
 
 
+## 参考资料
+
+- Eckel B. Java 编程思想[M]. 机械工业出版社, 2002.
+- Bloch J. Effective java[M]. Addison-Wesley Professional, 2017.
+- Cay S,周立新等译. Java核心技术 卷一 [M].机械工业出版社,2017
+
 
 
