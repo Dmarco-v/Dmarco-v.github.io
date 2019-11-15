@@ -11,7 +11,7 @@
 
 <!-- GFM-TOC -->
 
-
+**注：本篇所有题目均来自[LeetCode](https://leetcode-cn.com)**
 
 ### 一、二分查找
 
@@ -244,11 +244,222 @@ class Solution {
 
 ### 二、排序
 
+#### 1.排序算法
+
+##### 1.1 三种基本排序
+
+冒泡排序
+
+最简单的排序算法，每次比较两个元素，如果顺序错误就交换。
+
+```java
+public static int[] bubbleSort(int[] array){
+    if(array==null || array.length<2) return array;
+    for(int i=0;i<array.length;i++){
+        boolean isSwap=false;//标识每轮是否发生交换
+        for(int j=0;j<array.length-1-i;j++){//每趟排完,后i个数有序
+            if(array[j]>array[j+1]){
+                swap(array,j,j+1);
+                isSwap=true;
+            }
+        }
+        if(!isSwap) break;
+    }
+    return array;
+}
+```
+
+选择排序
+
+依次从剩余数组元素中选出最小元素并排列。
+
+```java
+public static int[] selectionSort(int[] array){
+    if(array==null || array.length<2) return array;
+    for(int i=0;i<array.length;i++){
+        int minIndex=i;
+        for(int j=i+1;j<array.length;j++){
+            if(array[j]<array[minIndex]){
+                minIndex=j;
+            }
+        }
+        if(minIndex!=i){
+            swap(array,i,minIndex);
+        }
+    }
+    return array;
+}
+```
+
+插入排序
+
+每次将当前元素插入到左侧有序数组中，使得插入后的左侧依然有序。
+
+```java
+public static int[] insertionSort(int[] array){
+    if(array==null || array.length<2) return array;
+    for(int i=0;i<array.length-1;i++){
+        int index=i;
+        int tmp=array[index+1];
+        while(index>=0 && tmp<array[index]){
+            array[index+1]=array[index];
+            index--;
+        }
+        array[index+1]=tmp;
+    }
+    return array;
+}
+```
+
+##### 1.2 希尔排序
+
+希尔排序是对插入排序的改进。又称为缩小增量排序。与插入排序的区别在于，每次移动的间隔元素个数由1个变为增量个，然后每轮移动完后增量减少为一半。
+
+```java
+    public static int[] shellSort(int[] array){
+        if(array==null || array.length<2) return array;
+        int increment=array.length/2;
+        while(increment>0){
+            for(int i=increment;i<array.length;i++){
+                int index=i-increment;
+                int tmp=array[i];
+                while(index>=0 && tmp<array[index]){
+                    array[index+increment]=array[index];
+                    index-=increment;
+                }
+                array[index+increment]=tmp;
+            }
+            increment/=2;//增量每次减小一半
+        }
+        return array;
+    }
+```
+
+##### 1.3 归并排序
+
+归并排序是一种高效的排序方法。将序列逐次拆分为子序列直至子序列元素为1，然后将有序的子序列进行合并。
+
+```java
+public static int[] mergeSort(int[] array){
+    if(array==null || array.length<2) return array;
+    int mid=array.length/2;
+    int[] left= Arrays.copyOfRange(array,0,mid);
+    int[] right=Arrays.copyOfRange(array,mid,array.length);
+    return merge(mergeSort(left),mergeSort(right));
+}
+private static int[] merge(int[]left,int[] right){
+    int [] res=new int[left.length+right.length];
+    int index=0,leftIndex=0,rightIndex=0;
+    while(index<res.length){
+        if(leftIndex>=left.length) res[index++]=right[rightIndex++];
+        else if(rightIndex>=right.length) res[index++]=left[leftIndex];
+        else if(left[leftIndex]<right[rightIndex]){
+            res[index++]=left[leftIndex++];
+        }else res[index++]=right[rightIndex++];
+    }
+    return res;
+}
+```
+
+##### 1.4 快速排序
+
+快速排序也是一种高效的排序算法。通过一个切分元素将数组切分为左右两个子数组，左边小于切分元素，右边大于该元素。递归对子数组进行快速排序。
+
+```java
+public static int[] quickSort(int[] array){
+    return quickSort(array,0,array.length-1);
+}
+private static int[] quickSort(int[] array,int start,int end){
+    if(array==null || array.length<2) return array;
+    int index=partition(array,start,end);
+    if(index>start) quickSort(array,start,index-1);
+    if(index<end) quickSort(array,index+1,end);
+    return array;
+}
+private static int partition(int[] array,int start,int end){
+    int i=start,j=end;
+    while(i<j){
+        while(array[j]>=array[end] && i<j) j--;
+        while(array[i]<array[end] && i<j) i++;
+        if(i<j) swap(array,i,j );
+    }
+    return i;
+}
+```
+
+算法改进：
+
+- 对于小数组，插入排序的性能更好，可以在小数组时切换到插入排序。
+- 基准值的选取。上述代码中选取的基准值是最后一个数，最好的情况是每次都能取中位数作为切分元素。一般折中的办法是取三个元素并将居中元素作为切分元素。
+- 对于有大量重复元素的数组，可以将数组切分为三部分，分别对应为小于、等于和大于切分元素。
+
+##### 1.5 堆排序
+
+堆排序是利用堆设计的排序算法。堆是一个完全二叉树，并满足其子节点都大于/小于等于其父节点的值。堆也可以用数组表示，其中位置为k（位置=索引+1）的节点的父节点位置为k/2，其子节点的位置为2k和2k+1。
+
+堆的有序化方式有两种：
+
+- 上浮。当一个节点比其父节点大，那么交换两个节点。不断地向上进行比较和交换，这种操作称为上浮。
+
+```java
+private void swim(int k){
+    while(k>1 && heap[k]>heap[k/2]){
+        swap(heap,k,k/2);
+        k/=2;
+    }
+}
+```
+
+- 下沉。当一个节点比其子节点小，那么交换两个节点。不断地向下进行比较和交换称为下沉。一个节点如果有两个子节点，那么应与两个子节点中大的进行交换。
+
+```java
+private void sink(int k){
+    while(2*k<=N){//至少要有子节点
+        int j=2*k;
+        if(j<N && heap[j]<heap[j+1]) j++;
+        if(heap[k]>=heap[j]) break;
+        swap(heap,k,j);
+        k=j;
+    }
+}
+```
+
+从右向左用sink()构造子堆效率较高。堆排序代码:
+
+```java
+public static int[] heapSort(int [] array){
+    int N=array.length-1;
+    for(int k=N/2;k>=1;k--){
+        sink(array,k,N);//从右向左构造有序堆
+    }
+    while(N>1){
+        swap(array,1,N--);
+        sink(array,1,N);
+    }
+    return array;
+}
+private static void sink(int[] array, int k, int N){
+    while(2*k<=N){
+        int j=2*k;
+        if(j<N && array[j]<array[j+1]) j++;
+        if(array[k]>=array[j]) break;
+        swap(array,k,j);
+        k=j;
+    }
+}
+```
+
+
+
+##### 1.6 排序算法总结
 
 
 
 
-#### 1.荷兰国旗问题#75
+
+#### 2.应用
+
+##### 2.1荷兰国旗问题#75
 
 描述：给定一个包含红色、白色和蓝色，一共 *n* 个元素的数组，**原地**对它们进行排序，使得相同颜色的元素相邻，并按照红色、白色、蓝色顺序排列。此题中，我们使用整数 0、 1 和 2 分别表示红色、白色和蓝色。
 
@@ -273,7 +484,7 @@ class Solution {
 }
 ```
 
-#### 2.数组中第k个最大元素#215
+##### 2.数组中第k个最大元素#215
 
 描述：在未排序的数组中找到第 **k** 个最大的元素。请注意，你需要找的是数组排序后的第 k 个最大的元素，而不是第 k 个不同的元素。
 
@@ -341,7 +552,7 @@ class Solution {
 }
 ```
 
-#### 3.出现频率最多的k个元素#347
+##### 3.出现频率最多的k个元素#347
 
 描述：给定一个非空的整数数组，返回其中出现频率前 **k** 高的元素。
 
@@ -1762,7 +1973,7 @@ class Solution {
 
 使用BFS可以求解无权图的最短路径等**最优解**问题。
 
-##### 二叉树的锯齿形层次遍历#103
+#103二叉树的锯齿形层次遍历
 
 描述：给定一个二叉树，返回其节点值的锯齿形层次遍历。（即先从左往右，再从右往左进行下一层遍历，以此类推，层与层之间交替进行）。
 
