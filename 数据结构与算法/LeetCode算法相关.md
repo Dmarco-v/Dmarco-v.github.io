@@ -2036,9 +2036,126 @@ class Solution {
 }
 ```
 
-#127 最短单词路径
+#127 单词接龙
 
-描述：
+```java
+输入:
+beginWord = "hit",
+endWord = "cog",
+wordList = ["hot","dot","dog","lot","log","cog"]
+
+输出: 5
+
+解释: 一个最短转换序列是 "hit" -> "hot" -> "dot" -> "dog" -> "cog",
+     返回它的长度 5。
+```
+
+描述：找出一条从beginWord到endWord的最短路径，规定每次转换只能改变一个字母，且转换过程中间的单词也必须是字典中的单词。
+
+```java
+class Solution {
+    public int ladderLength(String beginWord, String endWord, List<String> wordList) {
+        
+    }
+}
+```
+
+#279 完全平方数
+
+描述：给定正整数 *n*，找到若干个完全平方数（比如 `1, 4, 9, 16, ...`）使得它们的和等于 *n*。你需要让组成和的完全平方数的个数最少。
+
+思路：可以将所有整数看成一张图中的节点，如果两个数之间相差一个完全平方数，则认为两数之间有一条边，那么问题就可以转化为求从节点0到n的最短路径。
+
+```java
+class Solution {
+    public int numSquares(int n) {
+        List<Integer> squares=generateSquares(n);//小于n的所有平方数
+        Queue<Integer> queue=new LinkedList<>();
+        boolean[] marked=new boolean[n+1];
+        queue.add(n);
+        marked[n]=true;
+        int level=0;
+        while(!queue.isEmpty()){
+            int size=queue.size();
+            level++;
+            while(size-->0){
+                int cur=queue.poll();
+                for(int s:squares){
+                    int next=cur-s;
+                    if(next<0) break;
+                    if(next==0) return level;
+                    if(marked[next]) continue;
+                    marked[next]=true;
+                    queue.add(next);
+                }
+            }
+        }
+        return n;
+    }
+    private List<Integer> generateSquares(int n){
+        List<Integer> res=new ArrayList<>();
+        for(int i=1;i*i<=n;i++){
+            res.add(i*i);
+        }
+        return res;
+    }
+}
+```
+
+#1091 二进制矩阵中的最短路径
+
+描述：在一个NxN的网格中，每个单元格有两种状态，空(0)和阻塞(1)，求从左上角到右下角的最短路径长度，路径中相邻单元格可在八个方向之一上连通。
+
+思路：
+
+```java
+class Solution {
+    private class Node{
+        int x;
+        int y;
+        int value;
+        public Node(int x, int y, int value){
+            this.x = x;
+            this.y = y;
+            this.value = value;
+        }
+    }    
+    public int shortestPathBinaryMatrix(int[][] grid) {
+        int row = grid.length;
+        int col = grid[0].length;
+        if(grid[row-1][col-1] == 1 || grid[0][0] == 1)
+            return -1;
+        return bfs(grid);
+    }
+    private int bfs(int[][] grid) {
+        boolean[][] visit = new boolean[grid.length][grid[0].length];
+        Node node = new Node(0,0,1);
+        visit[0][0] = true;
+        LinkedList<Node> queue = new LinkedList<>();
+        queue.push(node);
+        int x[] = {-1, -1, -1, 0, 1, 1, 1, 0};
+        int y[] = {-1, 0, 1, 1, 1, 0, -1, -1};
+        while(!queue.isEmpty()){
+            Node root = queue.removeFirst();
+            int val = root.value;
+            if(root.x == grid.length - 1 && root.y == grid[0].length - 1) {
+                return root.value;
+            }
+            for(int i = 0; i < x.length; i++) {
+                int row = root.x + x[i];
+                int col = root.y + y[i];
+                if(row >=0 && col >=0 && row < grid.length && col < grid[0].length && grid[row][col] == 0 && !visit[row][col]){
+                    queue.add(new Node(row,col,val+1));
+                    visit[row][col] = true;
+                }
+            }
+        }
+        return -1;
+    }
+}
+```
+
+
 
 
 
