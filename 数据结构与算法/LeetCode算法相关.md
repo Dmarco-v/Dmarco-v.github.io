@@ -2217,7 +2217,7 @@ class Solution {
 
 #### 2.DFS
 
-深度优先搜索
+深度优先搜索在得到一个新节点后立即对该节点的下一个节点进行遍历，直到没有新节点出现。
 
 
 
@@ -2251,7 +2251,7 @@ class Solution {
         for(int i=1;i<nums.length;i++){
             max=Math.max(max+nums[i],nums[i]);
             res=Math.max(max,res);
-        }
+        } 
         return res;
     }
 }
