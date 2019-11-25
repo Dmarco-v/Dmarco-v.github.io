@@ -204,9 +204,13 @@ static：
 - 如果都没有，对参数转型成父类，再在本类中查找。this.func(super)
 - 没有则查找父类是否有对应方法。super.func(super)
 
-### 8. instanceof关键字
+### 8. 向上转型与向下转型
 
-用于向下转型时判断属于该对象属于哪个子类。
+向上转型：父类引用指向子类对象。如Animal animal=new Dog(); 注意子类引用不能指向父类对象。
+
+向下转型：把指向子类对象的父类引用赋给子类引用。如Dog dog=(Dog) animal; 注意向下转型需要强制转换。
+
+instanceof关键字用于向下转型时判断属于该对象属于哪个子类。
 
 ```java
 Animal animal=new Dog();
