@@ -210,7 +210,7 @@ static：
 
 向下转型：把指向子类对象的父类引用赋给子类引用。如Dog dog=(Dog) animal; 注意向下转型需要强制转换。
 
-instanceof关键字用于向下转型时判断属于该对象属于哪个子类。
+instanceof关键字。用于向下转型时判断属于该对象属于哪个子类。
 
 ```java
 Animal animal=new Dog();
