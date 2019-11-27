@@ -2177,7 +2177,7 @@ class Solution {
         Node root=new Node(0,0,1);
         Queue<Node> queue=new LinkedList<>();
         queue.add(root);
-        int [][] direction={{-1,-1},{-1,1},{1,-1},{1,1},{1,0},{0,1},{-1,0},{0,-1}};
+        int [][] direction={ {-1,-1}, {-1,1}, {1,-1}, {1,1}, {1,0}, {0,1}, {-1,0}, {0,-1}};
         while(!queue.isEmpty()){
             Node node=queue.poll();
             if(node.x==row-1 && node.y==col-1){
