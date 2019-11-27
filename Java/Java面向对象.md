@@ -122,7 +122,6 @@ Animal <|-- Cat
 ```
 
 <div align="center"> <img src="./pics/3Generalization.png" width="150"/> </div><br>
-
 ### 2.实现
 
 实现一个接口，java中用implements关键字表示。
@@ -143,7 +142,6 @@ Fruit <|.. Banana
 ```
 
 <div align="center"> <img src="./pics/4Realization.png" width="150"/> </div><br>
-
 ### 3.依赖
 
 是一种使用的关系，即一个类的实现需要另一个类的协助，所以要尽量不使用双向的互相依赖，在程序中一般表现为类A中的方法需要类B的实例作为其参数或者变量，而类A本身并不需要引用类B的实例作为其成员变量。 
@@ -166,7 +164,6 @@ Animal ..> Fruit
 ```
 
 <div align="center"> <img src="./pics/5Dependency.png" width="100"/> </div><br> 
-
 ### 4.关联
 
 表示类与类之间的联接,它使一个类知道另一个类的属性和方法，这种关系比依赖更强、不存在依赖关系的偶然性、关系也不是临时性的，一般是长期性的，在程序中被关联类B以类属性的形式出现在关联类A中，也可能是关联类A引用了一个类型为被关联类B的全局变量。
@@ -187,7 +184,6 @@ Rider "1" - "n" Horse
 ```
 
 <div align="center"> <img src="./pics/6Association.png" width="200"/> </div><br> 
-
 ### 5.聚合
 
 表示整体与部分之间的关系，是has-a关系。如果整体没有了，部分还会继续存在。例如公司没有了，员工和老板都还在。
@@ -210,7 +206,6 @@ Company o-- Boss
 ```
 
 <div align="center"> <img src="./pics/7Aggregation.png" width="150"/> </div><br> 
-
 ### 6.组合
 
 表示整体与部分之间的关系，但比聚合关系更强，是contains-a关系。如果整体没有了，部分也会没有。如公司没有了，部门也没有了。

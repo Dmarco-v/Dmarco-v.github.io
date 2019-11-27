@@ -7,8 +7,8 @@ java开发技术总结，持续更新~
 4. [Java I/O](Java/JavaIO.md)
 5. [Java 并发](Java/Java并发.md)
 6. [JVM](url)
-6. [面向对象](url)
-7. [设计模式](url)
+6. [面向对象](Java/Java面向对象.md)
+7. [设计模式](Java/Java设计模式)
 
 ## 数据结构与算法
 1. [剑指offer](数据结构与算法/剑指Offer.md)
