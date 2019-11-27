@@ -6,7 +6,7 @@
 - [贪心法](#四贪心法)
 - [分治法](#五分治法)
 - [数学题](#六数学题)
-- [搜索算法](#七搜索算法)
+- [搜索](#七搜索)
 - [动态规划](#八动态规划)
 
 <!-- GFM-TOC -->
@@ -1977,7 +1977,7 @@ class Solution {
 
 
 
-### 七、搜索算法
+### 七、搜索
 
 #### 1.BFS
 
@@ -1997,39 +1997,22 @@ class Solution {
         List<List<Integer>> res=new ArrayList<>();
         if(root==null) return res;
         int layer=1;
-        Stack <TreeNode> s1=new Stack<>();
-        Stack <TreeNode> s2=new Stack<>();
-        s1.add(root);
-        while(!s1.isEmpty() || !s2.isEmpty()){
-            if(layer%2==1){
-                List<Integer> list=new ArrayList<>();
-                while(!s1.isEmpty()){
-                    TreeNode node=s1.pop();
-                    if(node!=null) {
-                        list.add(node.val);
-                        s2.push(node.left);
-                        s2.push(node.right);
-                    }
-                }
-                if(!list.isEmpty()){
-                    res.add(list);
-                    layer++;
-                }
-            }else{
-                List<Integer> list=new ArrayList<>();
-                while(!s2.isEmpty()){
-                    TreeNode node=s2.pop();
-                    if(node!=null){
-                        list.add(node.val);
-                        s1.push(node.right);
-                        s1.push(node.left);
-                    }
-                }
-                if(!list.isEmpty()){
-                    res.add(list);
-                    layer++;
-                }
+        Queue<TreeNode> queue=new LinkedList<>();
+        queue.add(root);
+        while(!queue.isEmpty()){
+            int len=queue.size();
+            List<Integer> list=new LinkedList<>();
+            while(len>0){
+                TreeNode node=queue.poll();
+                if((layer & 1)==1){
+                    list.add(node.val);
+                }else list.add(0,node.val);
+                if(node.left!=null) queue.add(node.left);
+                if(node.right!=null) queue.add(node.right);
+                len--;
             }
+            res.add(list);
+            layer++;
         }
         return res;
     }
@@ -2168,45 +2151,44 @@ class Solution {
 
 思路：
 
+- 定义一个内部类，包含三个属性。横纵坐标和到该坐标最短畅通路径的长度。
+- 如果起点或终点不可达，返回-1
+- 用bfs遍历矩阵，找到可行路径。每次从队列中取出一个元素时，判断该坐标是否是终点，如果是，则返回其路径长度。因为每次各个方向都是走一步，这样可以保证返回值是第一个到达终点的，即最短路径。
+
 ```java
 class Solution {
     private class Node{
         int x;
         int y;
         int value;
-        public Node(int x, int y, int value){
-            this.x = x;
-            this.y = y;
-            this.value = value;
+        public Node(int x,int y,int value){
+            this.x=x;
+            this.y=y;
+            this.value=value;
         }
-    }    
-    public int shortestPathBinaryMatrix(int[][] grid) {
-        int row = grid.length;
-        int col = grid[0].length;
-        if(grid[row-1][col-1] == 1 || grid[0][0] == 1)
-            return -1;
-        return bfs(grid);
     }
-    private int bfs(int[][] grid) {
-        boolean[][] visit = new boolean[grid.length][grid[0].length];
-        Node node = new Node(0,0,1);
-        visit[0][0] = true;
-        Queue<Node> queue = new LinkedList<>();
-        queue.push(node);
-        int x[] = {-1, -1, -1, 0, 1, 1, 1, 0};
-        int y[] = {-1, 0, 1, 1, 1, 0, -1, -1};
+    public int shortestPathBinaryMatrix(int[][] grid) {
+        int row=grid.length;
+        int col=grid[0].length;
+        if(grid[0][0]==1 || grid[row-1][col-1]==1) return -1;
+        return bfs(grid,row,col);
+    }
+    private int bfs(int[][]grid,int row,int col){
+        Node root=new Node(0,0,1);
+        Queue<Node> queue=new LinkedList<>();
+        queue.add(root);
+        int [][] direction={{-1,-1},{-1,1},{1,-1},{1,1},{1,0},{0,1},{-1,0},{0,-1}};
         while(!queue.isEmpty()){
-            Node root = queue.poll();
-            int val = root.value;
-            if(root.x == grid.length - 1 && root.y == grid[0].length - 1) {
-                return root.value;
+            Node node=queue.poll();
+            if(node.x==row-1 && node.y==col-1){
+                return node.value;
             }
-            for(int i = 0; i < x.length; i++) {
-                int row = root.x + x[i];
-                int col = root.y + y[i];
-                if(row >=0 && col >=0 && row < grid.length && col < grid[0].length && grid[row][col] == 0 && !visit[row][col]){
-                    queue.add(new Node(row,col,val+1));
-                    visit[row][col] = true;
+            for(int [] d:direction){
+                int r=node.x+d[0];
+                int c=node.y+d[1];
+                if(r>=0 && c>=0 && r<row && c<col && grid[r][c]==0){
+                    queue.add(new Node(r,c,node.value+1));
+                    grid[r][c]=1;
                 }
             }
         }
