@@ -46,7 +46,8 @@
 public class LazySingleton
 {
     private static volatile LazySingleton instance=null;    //保证 instance 在所有线程中同步
-    private LazySingleton(){}    //private 避免类在外部被实例化
+    private LazySingleton(){
+    }    //private 避免类在外部被实例化
     public static synchronized LazySingleton getInstance()
     {
         if(instance==null)
@@ -77,6 +78,46 @@ public class HungrySingleton
     }
 }
 ```
+
+3.双重校验锁
+
+instance只需要被实例化一次，之后就可以直接使用了。加锁操作只需要对实例化那部分的代码进行，只有当 instance没有被实例化时，才需要进行加锁。
+
+双重校验锁先判断instance是否已被实例化，如果没有，则对实例化语句加锁。
+
+```java
+public class Singleton
+{
+    private static volatile Singleton instance=null;    
+    private Singleton(){
+    }    
+    public static synchronized Singleton getInstance()
+    {
+        if(instance==null){
+            synchronized(Singleton.class){
+                if(instance==null){
+                    instance=new Singleton();
+                }
+            }
+        }
+        return instance;
+    }
+}
+```
+
+设计双重校验锁的原因：
+
+如果只有外层的if语句，即如下代码。此时如果instance==null，可能会有两个线程同时进入内层，从而使得两个线程都会执行实例化操作。而如果使用双重校验锁，进入内层后只能有一个线程执行实例化操作。
+
+```java
+if(instance==null){
+    synchronized(Singleton.class){
+        instance=new Singleton();
+    }
+}
+```
+
+同时，使用volatile关键字修饰可以禁止JVM指令重排，从而保证多线程环境下instance=new Singleton();可以正常运行。
 
 **应用场景**
 
@@ -161,6 +202,8 @@ obj1==obj2?false
 - java.lang.Object#clone()
 
 ### 3.简单工厂
+
+
 
 
 
