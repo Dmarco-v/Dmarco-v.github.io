@@ -203,7 +203,54 @@ obj1==obj2?false
 
 ### 3.简单工厂
 
+创建一个对象时不向客户暴露内部细节，并提供一个创建对象的通用接口。
 
+结构：简单工厂将实例化的操作单独放到一个类中，该类即为简单工厂类，让简单工厂来决定应使用哪个具体的子类来进行实例化。
+
+**实现**
+
+接口：
+
+```java
+public interface Product {
+}
+```
+
+具体实现类：
+
+```java
+public class Product1 implements Product {
+}
+public class Product2 implements Product {
+}
+```
+
+简单工厂类：
+
+```java
+public class SimpleFactory{
+    public Product createProduct(int type){
+        if(type==1){
+            return new Product1();
+        }else if(type==2){
+            return new Product2();
+        }
+    }
+}
+```
+
+访问类：
+
+```java
+public class Client{
+    public static void main(String[] args) {
+        SimpleFactory simpleFactory = new SimpleFactory();
+        Product product = simpleFactory.createProduct(1);
+    }
+}
+```
+
+效果：客户类只需要传入一个类别参数即可完成对象的创建。
 
 
 
