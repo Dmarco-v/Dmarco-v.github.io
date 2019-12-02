@@ -2112,25 +2112,26 @@ class Solution {
 ```java
 class Solution {
     public int numSquares(int n) {
-        List<Integer> squares=generateSquares(n);//小于n的所有平方数
+        List<Integer> squares=generateSquares(n);
         Queue<Integer> queue=new LinkedList<>();
-        boolean[] marked=new boolean[n+1];
+        boolean[] marked=new boolean[n];
         queue.add(n);
-        marked[n]=true;
+        marked[n-1]=true;
         int level=0;
         while(!queue.isEmpty()){
             int size=queue.size();
             level++;
-            while(size-->0){
+            while(size>0){
                 int cur=queue.poll();
                 for(int s:squares){
                     int next=cur-s;
                     if(next<0) break;
                     if(next==0) return level;
                     if(marked[next]) continue;
-                    marked[next]=true;
                     queue.add(next);
+                    marked[next]=true;
                 }
+                size--;
             }
         }
         return n;
