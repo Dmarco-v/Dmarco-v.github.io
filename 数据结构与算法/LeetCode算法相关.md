@@ -2257,7 +2257,7 @@ class Solution {
             return;
         }
         board[i][j]='#';
-        int[][]direction={{0,1},{0,-1},{1,0},{-1,0}};
+        int[][]direction={ {0,1},{0,-1},{1,0},{-1,0} };
         for(int[] d:direction){
             dfs(board,i+d[0],j+d[1]);
         }
@@ -2308,7 +2308,7 @@ class Solution {
             return ;
         }
         grid[i][j]='0';
-        int[][]direction={{0,1},{0,-1},{1,0},{-1,0}};
+        int[][]direction={ {0,1},{0,-1},{1,0},{-1,0} };
         for(int []d:direction){
             dfs(grid,i+d[0],j+d[1]);
         }
