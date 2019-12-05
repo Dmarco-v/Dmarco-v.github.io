@@ -1989,7 +1989,7 @@ class Solution {
 
 描述：给定一个二叉树，返回其节点值的锯齿形层次遍历。（即先从左往右，再从右往左进行下一层遍历，以此类推，层与层之间交替进行）。
 
-思路：借助两个栈来实现奇偶层的轮流打印，一个整数用来标识层数。
+思路：借助双端队列存储每一层的节点。奇数层节点放后面，偶数层放前面。
 
 ```java
 class Solution {
@@ -2202,9 +2202,119 @@ class Solution {
 
 深度优先搜索在得到一个新节点后立即对该节点的下一个节点进行遍历，直到没有新节点出现。
 
+使用程序实现DFS时一般需要使用栈来保存节点信息，当遍历新节点返回时能继续遍历当前节点。同时需要对已经遍历过的节点进行标记。
+
+#130被围绕的区域
+
+```
+X X X X
+X O O X
+X X O X
+X O X X
+```
+
+运行你的函数后，矩阵变为：
+
+```
+X X X X
+X X X X
+X X X X
+X O X X
+```
+
+描述： 找到所有被 `'X'` 围绕的区域，并将这些区域里所有的 `'O'` 用 `'X'` 填充。 边界上的O以及与边界O相连的不会被填充，任何不与边界相连的O都会被填充。
+
+思路：从边缘开始搜索，遇到O将其换成#作为占位符，标记为与边界连通的O。待搜索结束后，再将遍历到的O填充为X，遇到#，替换回O。
+
+```java
+class Solution {
+    public void solve(char[][] board) {
+        if(board==null || board.length==0){
+            return ;
+        }
+        int m=board.length,n=board[0].length;
+        for(int i=0;i<m;i++){
+            for(int j=0;j<n;j++){
+                boolean isEdge=i==0||j==0||i==m-1||j==n-1;
+                if(isEdge && board[i][j]=='O'){
+                    dfs(board,i,j);
+                }
+            }
+        }
+        for(int i=0;i<m;i++){
+            for(int j=0;j<n;j++){
+                if(board[i][j]=='O'){
+                    board[i][j]='X';
+                }
+                if(board[i][j]=='#'){
+                    board[i][j]='O';
+                }
+            }
+        }
+    }
+    private void dfs(char[][]board,int i,int j){
+        if(i<0 || i>=board.length ||j<0||j>=board[0].length || board[i][j]!='O'){
+            return;
+        }
+        board[i][j]='#';
+        int[][]direction={{0,1},{0,-1},{1,0},{-1,0}};
+        for(int[] d:direction){
+            dfs(board,i+d[0],j+d[1]);
+        }
+    }
+}
+```
 
 
 
+
+
+#200 岛屿数量
+
+```
+输入:
+11110
+11010
+11000
+00000
+
+输出: 1
+```
+
+描述：给定一个由 '1'（陆地）和 '0'（水）组成的的二维网格，计算岛屿的数量。一个岛被水包围，并且它是通过水平方向或垂直方向上相邻的陆地连接而成的。你可以假设网格的四个边均被水包围。
+
+思路：题意即计算一个图中不连通的区域的数量。用dfs遍历非零节点的相邻节点，如果连通，则将其置为0，如果不连通，则遍历其他相邻节点。这样每遍历一个非零节点，其连通的所有节点都被置为0，计数+1。
+
+```java
+class Solution {
+    public int numIslands(char[][] grid) {
+        if(grid==null||grid.length==0){
+            return 0;
+        }
+        int m=grid.length,n=grid[0].length;
+        int islandsCount=0;
+        for(int i=0;i<m;i++){
+            for(int j=0;j<n;j++){
+                if(grid[i][j]=='1'){
+                    dfs(grid,i,j);
+                    islandsCount++;
+                }
+            }
+        }
+        return islandsCount;
+    }
+    private void dfs(char[][]grid,int i,int j){
+        if(i<0 ||i>=grid.length || j<0 || j>=grid[0].length || grid[i][j]=='0'){
+            return ;
+        }
+        grid[i][j]='0';
+        int[][]direction={{0,1},{0,-1},{1,0},{-1,0}};
+        for(int []d:direction){
+            dfs(grid,i+d[0],j+d[1]);
+        }
+    }
+}
+```
 
 
 
