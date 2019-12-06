@@ -2202,7 +2202,7 @@ class Solution {
 
 深度优先搜索在得到一个新节点后立即对该节点的下一个节点进行遍历，直到没有新节点出现。
 
-使用程序实现DFS时一般需要使用栈来保存节点信息，当遍历新节点返回时能继续遍历当前节点。同时需要对已经遍历过的节点进行标记。
+使用程序实现DFS时一般需要使用栈来保存节点信息，当遍历新节点返回时能继续遍历当前节点。或者使用递归。同时需要对已经遍历过的节点进行标记。
 
 #130被围绕的区域
 
@@ -2265,10 +2265,6 @@ class Solution {
 }
 ```
 
-
-
-
-
 #200 岛屿数量
 
 ```
@@ -2283,7 +2279,7 @@ class Solution {
 
 描述：给定一个由 '1'（陆地）和 '0'（水）组成的的二维网格，计算岛屿的数量。一个岛被水包围，并且它是通过水平方向或垂直方向上相邻的陆地连接而成的。你可以假设网格的四个边均被水包围。
 
-思路：题意即计算一个图中不连通的区域的数量。用dfs遍历非零节点的相邻节点，如果连通，则将其置为0，如果不连通，则遍历其他相邻节点。这样每遍历一个非零节点，其连通的所有节点都被置为0，计数+1。
+思路：题意即计算无向图连通块的数量。用dfs遍历非零节点的相邻节点，如果连通，则将其置为0，如果不连通，则遍历其他相邻节点。这样每遍历一个非零节点，其连通的所有节点都被置为0，计数+1。
 
 ```java
 class Solution {
@@ -2315,6 +2311,87 @@ class Solution {
     }
 }
 ```
+
+#547 朋友圈
+
+```
+输入: 
+[[1,1,0],
+ [1,1,0],
+ [0,0,1]]
+输出: 2 
+```
+
+描述：给定一个 N * N 的矩阵 M，表示班级中学生之间的朋友关系。如果M[i][j] = 1，表示已知第 i 个和 j 个学生互为朋友关系，否则为不知道。你必须输出所有学生中的已知的朋友圈总数。
+
+思路：即找到无向图的连通块的个数。与上题类似。
+
+```java
+class Solution {
+    public int findCircleNum(int[][] M) {
+        if(M==null){
+            return 0;
+        }
+        int N=M.length;
+        int[] visited=new int[N];
+        int count=0;
+        for(int i=0;i<N;i++){
+            if(visited[i]==0){
+                dfs(M,visited,i);
+                count++;
+            }
+        }
+        return count;
+    }
+    private void dfs(int[][]M,int[] visited,int i){
+        visited[i]=1;
+        for(int j=0;j<M.length;j++){
+            if(M[i][j]==1 && visited[j]==0){
+                dfs(M,visited,j);
+            }
+        }
+    }
+}
+```
+
+#695 岛屿的最大面积
+
+思路：即计算最大连通块的面积。用dfs遍历计算连通块的面积，每遍历到一个1，则面积+1。
+
+```java
+class Solution {
+    public int maxAreaOfIsland(int[][] grid) {
+        if(grid==null || grid.length==0){
+            return 0;
+        }
+        int maxArea=0;
+        for(int i=0;i<grid.length;i++){
+            for(int j=0;j<grid[0].length;j++){
+                maxArea=Math.max(maxArea,dfs(grid,i,j));
+            }
+        }
+        return maxArea;
+    }
+    private int dfs(int[][]grid,int i,int j){
+        if(i<0||i>=grid.length||j<0||j>=grid[0].length||grid[i][j]==0){
+            return 0;
+        }
+        grid[i][j]=1;
+        int area=1;
+        int[][]direction={ {0,1},{0,-1},{1,0},{-1,0} };
+        for(int[] d:direction){
+            area+=dfs(grid,i+d[0],j+d[1]);
+        }
+        return area;
+    }
+}
+```
+
+
+
+
+
+
 
 
 
