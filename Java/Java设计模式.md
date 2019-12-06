@@ -209,14 +209,14 @@ obj1==obj2?false
 
 **实现**
 
-接口：
+抽象产品：
 
 ```java
 public interface Product {
 }
 ```
 
-具体实现类：
+具体产品类：
 
 ```java
 public class Product1 implements Product {
@@ -239,7 +239,7 @@ public class SimpleFactory{
 }
 ```
 
-访问类：
+客户类：
 
 ```java
 public class Client{
@@ -250,7 +250,12 @@ public class Client{
 }
 ```
 
-效果：客户类只需要传入一个类别参数即可完成对象的创建。
+**优点**：只需要传入一个类别参数即可完成不同类型对象的创建。
+
+**缺点**：
+
+- 简单工厂类中集中了所有产品的创建逻辑，一旦这个工厂出现问题，整个系统都会受到影响。
+- 违背了开闭原则。一旦添加了新产品就不得不修改工厂类的逻辑，造成工厂类逻辑过于复杂。
 
 
 
@@ -258,11 +263,147 @@ public class Client{
 
 定义一个用于创建产品的接口，由子类决定生产什么产品。
 
+结构：
 
+- 抽象工厂：提供创建产品的接口，调用者通过它访问具体工厂的具体方法。
+- 具体工厂：实现抽象工厂中的抽象方法，完成具体产品的创建。
+- 抽象产品：定义产品规范，描述了产品的主要特性和功能。
+- 具体产品：实现抽象产品定义的接口，由具体工厂来创建。
+
+**实现**
+
+抽象工厂
+
+```java
+public interface Factory {
+    public Product factoryMethod();
+    public default void doSth(){
+        Product product=factoryMethod();
+    }
+}
+```
+
+具体工厂
+
+```java
+public class ConcreteFactory1 implements Factory {
+    @Override
+    public Product factoryMethod() {
+        System.out.println("Create ConcreteProduct1");
+        return new ConcreteProduct1();
+    }
+}
+public class ConcreteFactory2 implements Factory {
+    @Override
+    public Product factoryMethod() {
+        System.out.println("Create ConcreteProduct2");
+        return new ConcreteProduct2();
+    }
+}
+```
+
+抽象产品
+
+```java
+public interface Product {
+    public void show();
+}
+```
+
+具体产品
+
+```java
+public class ConcreteProduct1 implements Product {
+    @Override
+    public void show() {
+        System.out.println("This is concreteProduct1");
+    }
+}
+public class ConcreteProduct2 implements Product {
+    @Override
+    public void show() {
+        System.out.println("This is concreteProduct2");
+    }
+}
+```
+
+客户类
+
+```java
+public class Client {
+    public static void main(String[] args) {
+        //客户需要产品1
+        Factory factory=new ConcreteFactory1();
+        Product product=factory.factoryMethod();
+        product.show();
+        //客户需要产品2
+        Factory factory=new ConcreteFactory1();
+        Product product=factory.factoryMethod();
+        product.show();
+    }
+}
+```
+
+**优点**：
+
+- 只需通过创建不同的具体工厂类，调用相同的方法就可以创建不同的具体产品类实例。
+- 工厂方法模式是对简单工厂的进一步抽象和扩展。在简单工厂的基础上，增加了其扩展性。
+
+**JDK中的应用**
+
+- java.util.Calendar
+- java.util.ResourceBundle
+- java.text.NumberFormat
+- java.nio.charset.Charset
+- java.net.URLStreamHandlerFactory
+- java.util.EnumSet
+- javax.xml.bind.JAXBContext
 
 ### 5.抽象工厂
 
 提供一个创建产品族的接口，每个子类可以生产一系列相关产品。
+
+与工厂方法的区别：
+
+- 抽象工厂创建的是对象族，是多个等级的产品（相关联的产品）。而工厂方法只创建一个产品。
+- 抽象工厂创建的对象族中的的单个对象是采用工厂方法模式来进行。
+- 抽象工厂用到了组合关系，而工厂方法是实现关系。
+
+结构：结构与工厂方法相近，除了工厂与产品的关系由1对1变成了1对多。
+
+**实现**
+
+抽象工厂
+
+```java
+public interface Factory{
+    public Product1 createProduct1();
+    public Product2 createProduct2();
+}
+```
+
+具体工厂
+
+```java
+public class ConcreteFactory1 implements Factory{
+    @Override
+    public Product1 createProduct1(){
+        System.out.println("具体工厂1创建具体产品 11");
+        return new ConcreteProduct11();
+    }
+    @Override
+    public Product2 createProduct2(){
+        System.out.println("具体工厂1创建具体产品 21");
+        return new ConcreteProduct21();
+    }
+}
+```
+
+**JDK中的应用**
+
+- javax.xml.parsers.DocumentBuilderFactory
+- javax.xml.transform.TransformerFactory
+- javax.xml.xpath.XPathFactory
 
 
 
@@ -270,17 +411,107 @@ public class Client{
 
 将一个复杂对象分解成多个相对简单的部分，然后根据不同需要分别创建他们，最后构成该复杂对象。
 
+结构：
 
+- 产品：产品是由多个部件组成的复杂对象，由具体的建造者来创建各个部件。
+- 抽象建造者：包含创建各个子部件的抽象方法的接口，以及一个返回复杂产品的方法。
+- 具体建造者：实现抽象建造者接口，完成各部件的具体创建方法。
+- 指挥者：调用建造者对象中的部件构造与装配方法完成复杂对象的创建。
 
+**实现**
 
+产品：
 
+```java
+public class Product{
+    private String partA;
+    private String partB;
+    private String partC;
+    public void setPartA(String partA){
+        this.partA=partA;
+    }
+    public void setPartB(String partB){
+        this.partB=partB;
+    }
+    public void setPartC(String partC){
+        this.partC=partC;
+    }
+    public void show(){
+        System.out.println("show the product");
+    }
+}
+```
 
+抽象建造者：
 
+```java
+public abstract class Builder{
+    protected Product product=new Product();
+    public abstract void buildPartA();
+    public abstract void buildPartB();
+    public abstract void buildPartC();
+    public Product getProduct(){
+        return product;
+    }
+}
+```
 
+具体建造者：
 
+```java
+public class ConcreteBuilder extends Builder
+{
+    //各种零部件的生产过程可以不尽相同
+    public void buildPartA(){
+        product.setPartA("建造 PartA");
+    }
+    public void buildPartB(){
+        product.setPartB("建造 PartB");
+    }
+    public void buildPartC(){
+        product.setPartC("建造 PartC");
+    }
+}
+```
 
+指挥者：
 
+```java
+class Director{
+    private Builder builder;
+    public Director(Builder builder){
+        this.builder=builder;
+    }
+    public Product construct(){
+        builder.buildPartA();
+        builder.buildPartB();
+        builder.buildPartC();
+        return builder.getProduct();
+    }
+}
+```
 
+访问类
+
+```java
+public class Client{
+    public static void main(String[] args){
+        Builder builder=new ConcreteBuilder();
+        Director director=new Director(builder);
+        Product product=director.construct();
+        product.show();
+    }
+}
+```
+
+**优点：**
+
+- 各具体建造者相互独立，增加了系统扩展性。
+- 客户端不必知道产品内部组成细节。
+
+**缺点：**
+
+- 产品的组成部分最好相同，不适用于产品内部变化较大的。
 
 
 
