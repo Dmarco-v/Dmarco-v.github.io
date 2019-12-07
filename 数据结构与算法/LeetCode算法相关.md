@@ -2387,7 +2387,46 @@ class Solution {
 }
 ```
 
+#### 3.回溯
 
+回溯法属于DFS，但与一般DFS的区别在于回溯法的目的是为了求出问题的解，而DFS的目的在于遍历。回溯法在遍历过程中发现该路径不是问题的解，那么久回溯到上一层或者上一个节点，而DFS是遍历搜索整个空间。
+
+回溯法需要注意：在一个递归链中，访问过的元素需要进行标记避免重复访问；但在递归返回后，需要将之前访问过的元素都标记为未访问，这样才不影响其他递归链的访问。
+
+##### 3.1 排列组合
+
+#17 电话号码的字母组合
+
+描述：给定一个仅包含数字 `2-9` 的字符串，返回所有它能表示的字母组合。
+
+思路：用回溯法逐次删除最后一个字符并拼接新的字符。
+
+```java
+class Solution {
+    private static final String[] LETTERS={ "abc", "def", "ghi", "jkl", "mno", "pqrs", "tuv", "wxyz" };
+    public List<String> letterCombinations(String digits) {
+        List<String> res=new LinkedList<>();
+        if(digits==null||digits.length()==0){
+            return res;
+        }
+        combine(new StringBuilder(),digits,res);
+        return res;
+    }
+    private void combine(StringBuilder sb,String digits,List<String> res){
+        if(sb.length()==digits.length()){
+            res.add(sb.toString());
+            return;
+        }
+        int curDigits=digits.charAt(sb.length())-'2';
+        String letters=LETTERS[curDigits];
+        for(char c:letters.toCharArray()){
+            sb.append(c);
+            combine(sb,digits,res);
+            sb.deleteCharAt(sb.length()-1);//回溯
+        }
+    }
+}
+```
 
 
 
