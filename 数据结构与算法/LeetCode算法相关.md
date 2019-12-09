@@ -2395,6 +2395,84 @@ class Solution {
 
 ##### 3.1 排列组合
 
+#46 全排列
+
+描述：给定一个**没有重复**数字的序列，返回其所有可能的全排列。
+
+```java
+class Solution {
+    public List<List<Integer>> permute(int[] nums) {
+        List<List<Integer>> res=new ArrayList<>();
+        List<Integer> permuteList=new ArrayList<>();
+        boolean[] visited=new boolean[nums.length];
+        doPermute(permuteList,visited,nums,res);
+        return res;
+    }
+    private void doPermute(List<Integer> permuteList,boolean[] visited,int[] nums,List<List<Integer>> res){
+        if(permuteList.size()==nums.length){
+            res.add(new ArrayList<>(permuteList));
+            return;
+        }
+        for(int i=0;i<nums.length;i++){
+            if(visited[i]){
+                continue;
+            }
+            visited[i]=true;
+            permuteList.add(nums[i]);
+            doPermute(permuteList,visited,nums,res);
+            permuteList.remove(permuteList.size()-1);
+            visited[i]=false;
+        }
+    }
+}
+```
+
+#47 含重复元素的全排列
+
+思路：首先对序列进行排序，在序列中添加一个数字时，判断该数字与前一个数字是否相同，如果相同且前一个数字还未访问，那么跳过这个数字。
+
+```java
+class Solution {
+    public List<List<Integer>> permuteUnique(int[] nums) {
+        List<List<Integer>> res=new ArrayList<>();
+        List<Integer> permuteList=new ArrayList<>();
+        Arrays.sort(nums);
+        boolean[] visited=new boolean[nums.length];
+        doPermute(permuteList,visited,nums,res);
+        return res;
+    }
+    private void doPermute(List<Integer> permuteList,boolean[] visited,int[] nums,List<List<Integer>> res){
+        if(permuteList.size()==nums.length){
+            res.add(new ArrayList<>(permuteList));
+            return ;
+        }
+        for(int i=0;i<nums.length;i++){
+            if(i>0 && nums[i]==nums[i-1] && !visited[i-1]){
+                continue;
+            }
+            if(visited[i]){
+                continue;
+            }
+            visited[i]=true;
+            permuteList.add(nums[i]);
+            doPermute(permuteList,visited,nums,res);
+            permuteList.remove(permuteList.size()-1);
+            visited[i]=false;
+        }
+    }
+}
+```
+
+
+
+
+
+
+
+
+
+
+
 #17 电话号码的字母组合
 
 描述：给定一个仅包含数字 `2-9` 的字符串，返回所有它能表示的字母组合。
@@ -2422,13 +2500,11 @@ class Solution {
         for(char c:letters.toCharArray()){
             sb.append(c);
             combine(sb,digits,res);
-            sb.deleteCharAt(sb.length()-1);//回溯
+            sb.deleteCharAt(sb.length()-1);
         }
     }
 }
 ```
-
-
 
 
 
