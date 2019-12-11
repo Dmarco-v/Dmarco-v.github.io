@@ -2410,7 +2410,7 @@ class Solution {
     }
     private void doPermute(List<Integer> permuteList,boolean[] visited,int[] nums,List<List<Integer>> res){
         if(permuteList.size()==nums.length){
-            res.add(new ArrayList<>(permuteList));
+            res.add(new ArrayList<>(permuteList));//注意new
             return;
         }
         for(int i=0;i<nums.length;i++){
@@ -2463,7 +2463,60 @@ class Solution {
 }
 ```
 
+#77 组合
 
+```java
+class Solution {
+    public List<List<Integer>> combine(int n, int k) {
+        List<List<Integer>> res=new ArrayList<>();
+        List<Integer> combineList=new ArrayList<>();
+        if(k>n){
+            return res;
+        }
+        doCombine(combineList,1,n,k,res);
+        return res;
+    }
+    private void doCombine(List<Integer> combineList,int start,int n,int k,List<List<Integer>> res){
+        if(k==0){
+            res.add(new ArrayList<>(combineList));
+            return;
+        }
+        for(int i=start;i<=n-k+1;i++){
+            combineList.add(i);
+            doCombine(combineList,i+1,n,k-1,res);
+            combineList.remove(combineList.size()-1);
+        }
+    }
+}
+```
+
+#39 组合总和
+
+描述：给定一个无重复元素的数组和一个目标数，求出使数字和为目标数的组合，数组中的数可以无限重复选择。
+
+```java
+class Solution {
+    public List<List<Integer>> combinationSum(int[] candidates, int target) {
+        List<List<Integer>> res=new ArrayList<>();
+        List<Integer> combineList=new ArrayList<>();
+        doCombine(combineList,0,candidates,target,res);
+        return res;
+    }
+    private void doCombine(List<Integer> combineList,int start,int[] candidates, int target,List<List<Integer>> res){
+        if(target==0){
+            res.add(new ArrayList<>(combineList));
+            return;
+        }
+        for(int i=start;i<candidates.length;i++){
+            if(candidates[i]<=target){
+                combineList.add(candidates[i]);
+                doCombine(combineList,i,candidates,target-candidates[i],res);
+                combineList.remove(combineList.size()-1);
+            }
+        }
+    }
+}
+```
 
 
 
@@ -2483,7 +2536,7 @@ class Solution {
 class Solution {
     private static final String[] LETTERS={ "abc", "def", "ghi", "jkl", "mno", "pqrs", "tuv", "wxyz" };
     public List<String> letterCombinations(String digits) {
-        List<String> res=new LinkedList<>();
+        List<String> res=new ArrayList<>();
         if(digits==null||digits.length()==0){
             return res;
         }
