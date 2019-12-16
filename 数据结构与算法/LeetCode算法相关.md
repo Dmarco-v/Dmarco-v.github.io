@@ -2499,23 +2499,24 @@ class Solution {
     public List<List<Integer>> combinationSum(int[] candidates, int target) {
         List<List<Integer>> res=new ArrayList<>();
         List<Integer> combineList=new ArrayList<>();
-        doCombine(combineList,0,candidates,target,res);
+        doCombine(combineList,candidates,target,0,res);
         return res;
     }
-    private void doCombine(List<Integer> combineList,int start,int[] candidates, int target,List<List<Integer>> res){
+    private void doCombine(List<Integer> combineList,int[] candidates,int target,int start,List<List<Integer>> res){
         if(target==0){
             res.add(new ArrayList<>(combineList));
-            return;
+            return ;
         }
         for(int i=start;i<candidates.length;i++){
-            if(candidates[i]<=target){
-                combineList.add(candidates[i]);
-                doCombine(combineList,i,candidates,target-candidates[i],res);
-                combineList.remove(combineList.size()-1);
+            if(target-candidates[i]<0){
+                continue;
             }
+            combineList.add(candidates[i]);
+            doCombine(combineList,candidates,target-candidates[i],i,res);
+            combineList.remove(combineList.size()-1);
         }
     }
-}
+}   
 ```
 
 
