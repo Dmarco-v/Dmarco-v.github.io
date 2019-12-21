@@ -3,8 +3,6 @@ Java开发技术总结，持续更新~
 
 ## Java
 
-**基础一定要打牢啊！！！**
-
 1. [Java 基础](Java/Java基础.md)
 2. [Java 容器](Java/Java容器.md)
 3. [Java I/O](Java/JavaIO.md)
@@ -26,7 +24,7 @@ Java开发技术总结，持续更新~
 
 ## 数据库
 
-**“程序员不能只会CRUD。”**
+**程序员不能只会CRUD**
 
 1. [数据库系统原理](url)
 2. [SQL语法](url)
@@ -59,9 +57,9 @@ Java开发技术总结，持续更新~
 4. [消息队列](url)
 5. [设计模式](系统设计/Java设计模式.md)
 
-## 编码风格
+****
 
-编码不规范，同事两行泪~
+## 编码风格
 
 1. [编码规范](https://github.com/alibaba/p3c/blob/master/阿里巴巴Java开发手册（华山版）.pdf)
 
