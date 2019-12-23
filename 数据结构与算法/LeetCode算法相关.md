@@ -2516,16 +2516,73 @@ class Solution {
             combineList.remove(combineList.size()-1);
         }
     }
-}   
+}
 ```
 
+#40 组合总和II
 
+描述：数组中的每个数字在组合中都只能使用一次。
 
+思路：添加visited数组用于记录当前位置的数是否访问过。1表示访问过。
 
+```java
+class Solution {
+    public List<List<Integer>> combinationSum2(int[] candidates, int target) {
+        List<List<Integer>> res=new ArrayList<>();
+        List<Integer> combineList=new ArrayList<>();
+        Arrays.sort(candidates);
+        doCombine(combineList,candidates,target,0,new int[candidates.length],res);
+        return res;
+    }
+    private void doCombine(List<Integer> combineList,int[] candidates, int target,int start,int[] visited, List<List<Integer>> res){
+        if(target==0){
+            res.add(new ArrayList<>(combineList));
+            return;
+        }
+        for(int i=start;i<candidates.length;i++){
+            if(i>0  && candidates[i]==candidates[i-1] && visited[i-1]==0 ){
+                continue;
+            }
+            if(candidates[i]<=target){
+                visited[i]=1;
+                combineList.add(candidates[i]);
+                doCombine(combineList,candidates,target-candidates[i],i+1,visited,res);
+                combineList.remove(combineList.size()-1);
+                visited[i]=0;
+            }
+        }
+    }
+}
+```
 
+#216 组合总和III
 
+描述：从1-9中选出k个不重复的数，使他们的和为n。
 
-
+```java
+class Solution {
+    public List<List<Integer>> combinationSum3(int k, int n){
+        List<List<Integer>> res=new ArrayList<>();
+        List<Integer> combineList=new ArrayList<>();
+        doCombine(combineList,k,n,1,res);
+        return res;
+    }
+    private void doCombine(List<Integer> combineList,int k,int n,int start, List<List<Integer>> res){
+        if(k==0 && n==0){
+            res.add(new ArraList<>(combineList));
+            return;
+        }
+        if(k==0 || n<=0){
+            return;
+        }
+        for(int i=start;i<=9;i++){
+            combineList.add(i);
+            doCombine(combineList,k-1,n-1,i+1,res);
+            combineList.remove(combineList.size()-1);
+        }
+    }
+}
+```
 
 #17 电话号码的字母组合
 
