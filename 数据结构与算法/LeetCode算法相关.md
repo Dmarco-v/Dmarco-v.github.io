@@ -2393,7 +2393,7 @@ class Solution {
 
 回溯法需要注意：在一个递归链中，访问过的元素需要进行标记避免重复访问；但在递归返回后，需要将之前访问过的元素都标记为未访问，这样才不影响其他递归链的访问。
 
-##### 3.1 排列组合
+##### 3.1 排列
 
 #46 全排列
 
@@ -2462,6 +2462,8 @@ class Solution {
     }
 }
 ```
+
+##### 3.2 组合
 
 #77 组合
 
@@ -2588,20 +2590,20 @@ class Solution {
 
 描述：给定一个仅包含数字 `2-9` 的字符串，返回所有它能表示的字母组合。
 
-思路：用回溯法逐次删除最后一个字符并拼接新的字符。
+思路：用StringBuilder的长度标识字符串当前位置。
 
 ```java
 class Solution {
     private static final String[] LETTERS={ "abc", "def", "ghi", "jkl", "mno", "pqrs", "tuv", "wxyz" };
+
     public List<String> letterCombinations(String digits) {
         List<String> res=new ArrayList<>();
-        if(digits==null||digits.length()==0){
-            return res;
+        if(digits!=null && digits.length()!=0){
+            doCombine(new StringBuilder(),digits,res);
         }
-        combine(new StringBuilder(),digits,res);
         return res;
     }
-    private void combine(StringBuilder sb,String digits,List<String> res){
+    private void doCombine(StringBuilder sb,String digits,List<String> res){
         if(sb.length()==digits.length()){
             res.add(sb.toString());
             return;
@@ -2610,12 +2612,46 @@ class Solution {
         String letters=LETTERS[curDigits];
         for(char c:letters.toCharArray()){
             sb.append(c);
-            combine(sb,digits,res);
+            doCombine(sb,digits,res);
             sb.deleteCharAt(sb.length()-1);
         }
     }
 }
 ```
+
+**求子集**：求子集的问题本质上也是一个组合问题，只不过组合中元素的个数没有限定。
+
+#78 子集
+
+描述：给定一组**不含重复元素**的整数数组 *nums*，返回该数组所有可能的子集（幂集）。
+
+思路：即求size=0~n的组合问题，注意空集不要遗漏。
+
+```java
+class Solution {
+    public List<List<Integer>> subsets(int[] nums) {
+        List<List<Integer>> res=new ArrayList<>();
+        List<Integer> subset=new ArrayList<>();
+        for(int size=0;size<=nums.length;size++){
+            findSubsets(subset,nums,0,size,res);
+        }
+        return res;
+    }
+    private void findSubsets(List<Integer> subset,int[] nums, int start,int size,List<List<Integer>> res){
+        if(subset.size()==size){
+            res.add(new ArrayList<>(subset));
+            return;
+        }
+        for(int i=start;i<nums.length;i++){
+            subset.add(nums[i]);
+            findSubsets(subset,nums,i+1,size,res);
+            subset.remove(subset.size()-1);
+        }
+    }
+}
+```
+
+
 
 
 
