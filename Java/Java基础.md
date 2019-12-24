@@ -319,7 +319,7 @@ Throwable 可以用来表示任何可以作为异常抛出的类，分为两种�
 ### 3. Throwable继承关系
 
 <div align="center"> <img src="./pics/1Throwable.png" width="600"/> </div><br>
-### 4.常用方法
+### 4. 常用方法
 
 Exception和它的所有子类没有提供任何特殊方法供使用，它们的所有方法都是来自其基类Throwable。
 
