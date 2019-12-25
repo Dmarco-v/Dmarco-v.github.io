@@ -8,7 +8,7 @@ Java开发技术总结，持续更新~
 3. [Java I/O](Java/JavaIO.md)
 4. [Java 并发](Java/Java并发.md)
 5. [面向对象](Java/Java面向对象.md)
-6. [JVM](url)
+6. [JVM](Java/JVM.md)
 
 ****
 
@@ -26,7 +26,7 @@ Java开发技术总结，持续更新~
 
 **程序员不能只会CRUD**
 
-1. [数据库系统原理](url)
+1. [数据库系统原理](数据库/数据库系统原理.md)
 2. [SQL语法](url)
 3. [MySQL](url)
 4. [Redis](url)
