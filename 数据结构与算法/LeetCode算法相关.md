@@ -2467,6 +2467,8 @@ class Solution {
 
 #77 组合
 
+描述：给定两个整数 *n* 和 *k*，返回 1 ... *n* 中所有可能的 *k* 个数的组合。
+
 ```java
 class Solution {
     public List<List<Integer>> combine(int n, int k) {
@@ -2492,7 +2494,7 @@ class Solution {
 }
 ```
 
-#39 组合总和
+#39 组合总和-重复选择
 
 描述：给定一个无重复元素的数组和一个目标数，求出使数字和为目标数的组合，数组中的数可以无限重复选择。
 
@@ -2521,11 +2523,13 @@ class Solution {
 }
 ```
 
-#40 组合总和II
+#40 组合总和II-不可重复选择
 
 描述：数组中的每个数字在组合中都只能使用一次。
 
-思路：添加visited数组用于记录当前位置的数是否访问过。1表示访问过。
+思路：添加一个数组用于记录当前位置的数是否访问过。1表示访问过。
+
+- 去重：每次循环时需要先判断当前数字与前一个数字是否相同，如果相同且上一个数字未被访问过，则跳过当前数字。
 
 ```java
 class Solution {
@@ -2625,7 +2629,7 @@ class Solution {
 
 描述：给定一组**不含重复元素**的整数数组 *nums*，返回该数组所有可能的子集（幂集）。
 
-思路：即求size=0~n的组合问题，注意空集不要遗漏。
+思路：即求size=0~n的组合问题，注意空集size=0不要遗漏。
 
 ```java
 class Solution {
@@ -2645,6 +2649,45 @@ class Solution {
         for(int i=start;i<nums.length;i++){
             subset.add(nums[i]);
             findSubsets(subset,nums,i+1,size,res);
+            subset.remove(subset.size()-1);
+        }
+    }
+}
+```
+
+#90 含有重复元素求子集
+
+描述：给定一个**可能包含重复元素**的整数数组 nums，返回该数组所有可能的子集（幂集）。
+
+思路：添加一个数组用于记录当前数是否访问过。1表示访问过。
+
+```java
+class Solution {
+    public List<List<Integer>> subsetsWithDup(int[] nums) {
+        Arrays.sort(nums);
+        List<List<Integer>> res=new ArrayList<>();
+        List<Integer> subset=new ArrayList<>();
+        int[] visited =new int[nums.length];
+        for(int size=0;size<=nums.length;size++){
+            findSubsets(subset,nums,0,size,visited,res);
+        }
+        return res;
+    }
+    private void findSubsets(List<Integer> subset, int[] nums,int start,
+                             int size, int[] visited,
+                             List<List<Integer>> res){
+        if(subset.size() == size){
+            res.add(new ArrayList<>(subset));
+            return;
+        }
+        for(int i=start;i<nums.length;i++){
+            if(i!=0 && nums[i]==nums[i-1] && visited[i-1]==0){
+                continue;
+            }
+            subset.add(nums[i]);
+            visited[i]=1;
+            findSubsets(subset,nums,i+1,size,visited,res);
+            visited[i]=0;
             subset.remove(subset.size()-1);
         }
     }
