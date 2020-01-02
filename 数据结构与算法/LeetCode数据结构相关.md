@@ -1532,6 +1532,32 @@ class Solution {
 
 ##### 3.树的路径
 
+#257 二叉树的所有路径
+
+返回所有根节点到叶子节点的路径。
+
+```java
+class Solution {
+    public List<String> binaryTreePaths(TreeNode root) {
+        List<String> paths=new ArrayList<>();
+        buildPath("",root,paths);
+        return paths;
+    }
+    private void buildPath(String path, TreeNode root, List<String> paths){
+        if(root!=null){
+            path+=""+root.val;
+            if(root.left==null && root.right==null){
+                paths.add(path);
+            }else{
+                path+="->";
+                buildPath(path,root.left,paths);
+                buildPath(path,root.right,paths);
+            }
+        }
+    }
+}
+```
+
 #112路径总和
 
 判断是否存在二叉树的路径和等于目标值
