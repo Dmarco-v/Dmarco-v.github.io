@@ -2694,9 +2694,58 @@ class Solution {
 }
 ```
 
+#93 复原IP地址
+
+描述：给定一个只包含数字的字符串，复原它并返回所有可能的 IP 地址格式。
+
+注意：可以出现单个0但不能出现两位以上以0开头的数字
+
+```java
+class Solution {
+    public List<String> restoreIpAddresses(String s) {
+        List<String> addrs=new ArrayList<>();
+        StringBuilder addr=new StringBuilder();
+        doRestore(addr,s,0,addrs);
+        return addrs;
+    }
+    private void doRestore(StringBuilder addr, String s,int k, List<String> addrs){
+        if(k==4 || s.length()==0){
+            if(k==4 && s.length()==0){
+                addrs.add(addr.toString());
+            }
+            return;
+        }
+        for(int i=0;i<s.length() && i<=2;i++){
+            if(i!=0 && s.charAt(0)=='0'){
+                break;
+            }
+            String part=s.substring(0,i+1);
+            if(Integer.valueOf(part)<=255){
+                if(addr.length()!=0){
+                    part="."+part;
+                }
+                addr.append(part);
+                doRestore(addr,s.substring(i+1),k+1,addrs);
+                addr.delete(addr.length()-part.length(),addr.length());
+            }
+        }
+    }
+}
+```
 
 
 
+
+
+
+
+##### 3.3 经典问题
+
+#37 数独
+
+
+
+#51 N皇后
 
 
 
@@ -2709,7 +2758,19 @@ class Solution {
 - 贪心法的每一步贪心决策都无法改变，每次根据上一步的最优解推导下一步的最优解。之前的最优解不做保留。贪心法所求的结果不一定是全局最优解，因此在使用贪心法时必须确保策略具有无后效性，只与当前状态有关。
 - 动态规划求的是全局最优解，是从局部最优解推导出全局最优解的过程，其中边界条件是最易推导出的局部最优解。关键是求出状态转移方程。
 
-#### 1.连续子数组最大的和#53
+#### 1.斐波那契数列
+
+
+
+
+
+
+
+
+
+
+
+#53 连续子数组最大的和
 
 描述：给定一个整数数组 nums ，找到一个具有最大和的连续子数组（子数组最少包含一个元素），返回其最大和。
 
@@ -2731,6 +2792,8 @@ class Solution {
     }
 }
 ```
+
+
 
 
 
