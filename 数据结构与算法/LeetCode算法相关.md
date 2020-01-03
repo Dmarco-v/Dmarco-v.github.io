@@ -2758,11 +2758,90 @@ class Solution {
 - 贪心法的每一步贪心决策都无法改变，每次根据上一步的最优解推导下一步的最优解。之前的最优解不做保留。贪心法所求的结果不一定是全局最优解，因此在使用贪心法时必须确保策略具有无后效性，只与当前状态有关。
 - 动态规划求的是全局最优解，是从局部最优解推导出全局最优解的过程，其中边界条件是最易推导出的局部最优解。关键是求出状态转移方程。
 
+动态规划四要素：
+
+- 状态。用f[i] 来标识特定条件下某个更小规模的问题的解
+- 状态转移方程。f[i] =g( f[i-n] ) 通过一些更小规模的状态求max/min/sum等方式来推导当前状态。
+- 初始状态。递归的出口。f[0]
+- 结果。f[n]
+
+动态规划与递归：都是将原问题拆分为子问题然后求解，但本质上的区别在于，动态规划保存了子问题的解（即比递归多了一个状态），避免了重复计算。
+
 #### 1.斐波那契数列
 
+#70 爬楼梯
 
+描述：N阶楼梯，每次可以爬1阶或2阶，求有多少种上楼梯的方法。
 
+思路：定义一个数组dp存储上楼梯的方法数。则有dp[ i ]=dp[ i-1 ]+dp[ i-2 ]。
 
+```java
+class Solution {
+    public int climbStairs(int n) {
+        if(n<=2){
+            return n;
+        }
+        int dpi2=1,dpi1=2;
+        for(int i=2;i<n;i++){
+            int cur = dpi2+dpi1;
+            dpi2=dpi1;
+            dpi1=cur;
+        }
+        return dpi1;
+    }
+}
+```
+
+House Robber
+
+#198 数组
+
+- 状态。f(k)表示从前k个房屋中能抢到的最大金额。Ai为第i个房屋的金钱。
+- 转移方程。f(k)=max( f(k-2)+Ak , f(k-1) )
+- 初始条件。f(1)=A1
+- 结果。f(n)
+
+```java
+class Solution {
+    public int rob(int[] nums) {
+        int preMax=0,curMax=0;
+        for(int a:nums){
+            int tmp=curMax;
+            curMax=Math.max(preMax+a,curMax);
+            preMax=tmp;
+        }
+        return curMax;
+    }
+}
+```
+
+#213 环型数组
+
+思路：由于0和n不能同时抢，所以可以将问题分解为0-n-1和1-n
+
+```java
+class Solution {
+    public int rob(int[] nums) {
+        int n=nums.length;
+        if(n==0){
+            return 0;
+        }
+        if(n==1){
+            return nums[0];
+        }
+        return Math.max(robCount(nums,0,n-1),robCount(nums,1,n));
+    }
+    private int robCount(int[] nums,int l,int r){
+        int preMax=0,curMax=0;
+        for(int i=l;i<r;i++){
+            int tmp=curMax;
+            curMax=Math.max(preMax+nums[i],curMax);
+            preMax=tmp;
+        }
+        return curMax;
+    }
+}
+```
 
 
 
