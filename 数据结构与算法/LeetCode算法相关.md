@@ -2845,15 +2845,13 @@ class Solution {
 
 
 
-
-
-
+#### 2.数组区间
 
 #53 连续子数组最大的和
 
 描述：给定一个整数数组 nums ，找到一个具有最大和的连续子数组（子数组最少包含一个元素），返回其最大和。
 
-思路：动态规划。设以第i个数为结尾的最大子序列的和为F（i）。则有：
+DP：设以第i个数为结尾的最大子序列的和为F（i）。则有：
 
 - F（i）=max（F（i-1）+array[i]，array[i]）
 - 最大连续子序列res = max（F（i），F（i-1）...F（0））
@@ -2871,6 +2869,65 @@ class Solution {
     }
 }
 ```
+
+#303 区域和检索-数组不可变
+
+描述：给定一个数组，写出求和函数sumRange()。会多次调用sumRange方法。
+
+思路：由于多次调用，因此时间复杂度应尽可能低，暴力法O(n2)会超时。引入缓存，sum[i]为0到i-1的和。
+
+```java
+class NumArray {
+    private int[] sums;
+    public NumArray(int[] nums) {
+        sums=new int[nums.length+1];
+        for(int i=1;i<=nums.length;i++){
+            sums[i]=nums[i-1]+sums[i-1];
+        }
+    }    
+    public int sumRange(int i, int j) {
+        return sums[j+1]-sums[i];
+    }
+}
+```
+
+#413 等差数列划分
+
+描述：求一个数组中是等差数列的子数组的个数。
+
+DP：
+
+- 状态：dp[i]表示以i为结尾的等差数列的子数组个数。
+- 转移方程：当以i结尾的最后三个数成等差数列时，dp[i]=dp[i-1]+1；否则dp[i]=0
+- 初始：dp[2]=1
+- 结果：dp数组求和
+
+```java
+class Solution {
+    public int numberOfArithmeticSlices(int[] A) {
+        if(A==null || A.length<2){
+            return 0;
+        }
+        int[] dp=new int[A.length];
+        for(int i=2;i<A.length;i++){
+            if(A[i]-A[i-1]==A[i-1]-A[i-2]){
+                dp[i]=dp[i-1]+1;
+            }
+        }
+        int res=0;
+        for(int i=0;i<dp.length;i++){
+            res+=dp[i];
+        }
+        return res;
+    }
+}
+```
+
+
+
+
+
+#### 3.矩阵路径
 
 
 
