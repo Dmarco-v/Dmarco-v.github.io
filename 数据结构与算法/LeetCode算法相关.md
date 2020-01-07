@@ -2925,9 +2925,122 @@ class Solution {
 
 
 
-
-
 #### 3.矩阵路径
+
+#62 矩阵总路径数
+
+描述：一个 *m* x *n* 网格，统计出从左上角到右下角的路径总数。
+
+DP：
+
+- 状态：dp[i] [j]表示到达i，j的路径总数。
+- 转移方程：dp[i] [j]= dp[i] [j-1] +dp[i-1] [j]。
+- 初始：dp[0] [0]=1
+- 结果：dp[m-1] [n-1]
+
+```java
+class Solution {
+    public int uniquePaths(int m, int n) {
+        int[][] dp=new int[m][n];
+        for(int i=0;i<m;i++){
+            dp[i][0]=1;
+        }
+        for(int j=0;j<n;j++){
+            dp[0][j]=1;
+        }
+        for(int i=0;i<m;i++){
+            for(int j=0;j<n;j++){
+                dp[i][j]=dp[i-1][j]+dp[i][j-1];
+            }
+        }
+        return dp[m-1][n-1];
+    }
+}
+```
+
+空间复杂度：O（m*n）
+
+由于我们只需要记录dp[i] [j-1] 和dp[i-1] [j]，因此可以优化一下，用两个一维数组保存上一行和当前行的数即可。
+
+```java
+class Solution {
+    public int uniquePaths(int m, int n) {
+        int [] pre=new int[n];
+        int [] cur=new int[n];
+        Arrays.fill(pre,1);
+        Arrays.fill(cur,1);
+        for(int i=1;i<m;i++){
+            for(int j=1;j<n;j++){
+                cur[j]=cur[j-1]+pre[j];
+            }
+            pre=cur.clone();
+        }
+        return pre[n-1];
+    }
+}
+```
+
+再优化一下，使用一个一维数组就可以满足要求。
+
+```java
+class Solution {
+    public int uniquePaths(int m, int n) {
+        int [] dp=new int[n];
+        Arrays.fill(dp,1);
+        for(int i=1;i<m;i++){
+            for(int j=1;j<n;j++){
+                dp[j]+=dp[j-1];
+            }
+        }
+        return dp[n-1];
+    }
+}
+```
+
+
+
+#64 最小路径和
+
+描述：给定一个包含非负整数的 *m* x *n* 网格，请找出一条从左上角到右下角的路径，使得路径上的数字总和为最小。每次只能向下或向右移动一步。
+
+```java
+class Solution {
+    public int minPathSum(int[][] grid) {
+        if(grid.length==0 || grid[0].length==0){
+            return 0;
+        }
+        int m=grid.length,n=grid[0].length;
+        int[] dp=new int[n];
+        for(int i=0;i<m;i++){
+            for(int j=0;j<n;j++){
+                if(j==0){
+                    dp[j]=dp[j];
+                }else if(i==0){
+                    dp[j]=dp[j-1];
+                }else{
+                    dp[j]=Math.min(dp[j],dp[j-1]);
+                }
+                dp[j]+=grid[i][j];
+            }
+        }
+        return dp[n-1];
+    }
+}
+```
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
