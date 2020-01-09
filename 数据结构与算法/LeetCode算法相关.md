@@ -3030,7 +3030,72 @@ class Solution {
 
 
 
-#### 4.分割整数
+#### 4.整数拆分
+
+#343 整数拆分
+
+描述：给定一个正整数 *n*，将其拆分为**至少**两个正整数的和，并使这些整数的乘积最大化。 返回你可以获得的最大乘积。
+
+暴力解法：遍历所有组合，F(n)=max{i *F(n-1)} i=1,2,3,...n-1
+
+```java
+class Solution {
+    public int integerBreak(int n) {
+        if(n==2){
+            return 1;
+        }
+        int res=-1;
+        for(int i=1;i<n-1;i++){
+            res=Math.max(res,Math.max(i*(n-i),i*integerBreak(n-i)));
+        }
+        return res;
+    }
+}
+```
+
+记忆化搜索：暴力时间复杂度太高，可以增加存储以记录中间重复计算的部分。
+
+```java
+class Solution {
+    public int integerBreak(int n) {
+        int [] memory=new int [n+1];
+        return helper(memory,n);
+    }
+    public int helper(int[] memory, int n){
+        if(n==2){
+            return 1;
+        }
+        if(memory[n]!=0){
+            return memory[n];
+        }
+        int res=-1;
+        for(int i=1;i<n;i++){
+            res=Math.max(res,Math.max(i*(n-i),i*helper(memory,n-i)));
+        }
+        memory[n]=res;
+        return res;
+    }
+}
+```
+
+动态规划：将自顶向下的思路转换为自底向上
+
+```java
+class Solution {
+    public int integerBreak(int n) {
+        int[] dp=new int[n+1];
+        dp[2]=1;
+        for(int i=3;i<=n;i++){
+            for(int j=1;j<=i-1;j++){
+                dp[i]=Math.max(dp[i],Math.max(j*dp[i-j],j*(i-j)));
+            }
+        }
+        return dp[n];
+    }
+}
+```
+
+
 
 
 
