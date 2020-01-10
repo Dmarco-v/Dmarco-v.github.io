@@ -3095,6 +3095,37 @@ class Solution {
 }
 ```
 
+#279 完全平方数
+
+描述：给定正整数 *n*，找到若干个完全平方数（比如 `1, 4, 9, 16, ...`）使得它们的和等于 *n*。你需要让组成和的完全平方数的个数最少。
+
+```java
+class Solution {
+    public int numSquares(int n) {
+        List<Integer> squares=generateSquares(n);
+        int[] dp=new int[n+1];
+        for(int i=1;i<=n;i++){
+            int min=Integer.MAX_VALUE;
+            for(int s:squares){
+                if(s>i){
+                    break;
+                }
+                min=Math.min(min,dp[i-s]+1);
+            }
+            dp[i]=min;
+        }
+        return dp[n];
+    }
+    private List<Integer> generateSquares(int n){
+        List<Integer> res=new ArrayList<>();
+        for(int i=1;i*i<=n;i++){
+            res.add(i*i);
+        }
+        return res;
+    }
+}
+```
+
 
 
 
