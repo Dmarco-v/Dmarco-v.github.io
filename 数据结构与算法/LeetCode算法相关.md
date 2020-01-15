@@ -3135,11 +3135,85 @@ class Solution {
 
 #91 解码方法
 
+描述：26个字母编码成1~26，给定字符串，返回可能的解码方法数量。
 
+```
+输入: "12"
+输出: 2
+解释: 它可以解码为 "AB"（1 2）或者 "L"（12）。
+```
 
+DP：字符串长度为n
 
+- 状态：dp[i]表示长度为i的字符串的解码方法数
+- 转移方程：dp[i]=判断substring(i-1,i)为0则+dp[i-1]，判断substring(i-2,i)小于27则+dp[i-2]
+- 初始：dp[0]=1,dp[1]=s[0]=='0' ? 0 : 1
+- 结果：dp[n]
 
+```java
+class Solution {
+    public int numDecodings(String s) {
+        if(s==null || s.length()==0){
+            return 0;
+        }
+        int n=s.length();
+        int[] dp=new int[n+1];
+        dp[0]=1;
+        dp[1]=s.charAt(0)=='0'? 0:1;
+        for(int i=2;i<=n;i++){
+            int one=Integer.valueOf(s.substring(i-1,i));
+            if(one>0){
+                dp[i]+=dp[i-1];
+            }
+            //如果取两位时第一位为0，则跳过后面
+            if(s.charAt(i-2)=='0'){
+                continue;
+            }
+            int two=Integer.valueOf(s.substring(i-2,i));
+            if(two<27){
+                dp[i]+=dp[i-2];
+            }
+        }
+        return dp[n];
+    }
+}
+```
 
+#### 5.最长子序列
+
+给定一个序列{S1,...Sn}，从中取出若干数组成新的序列，且维持原数列中的先后顺序，则称新数列为原序列的一个子序列。
+
+#300 最长递增子序列(LIS Longest Increasing Subsequence)
+
+DP：
+
+- 状态：dp[i]表示以Si 结尾的递增子序列的长度
+- 转移方程：如果Si比当前序列最后一个数大，在之前最长的递增序列后加上Si即可，dp[i]=max(dp[ j ])+1( j<i )；如果小，则与之前的最大值相等即可。
+- 初始：dp[0]=1
+- 结果：max(dp[0]...dp[n-1])
+
+```java
+class Solution {
+    public int lengthOfLIS(int[] nums) {
+        int n=nums.length;
+        int[] dp=new int[n];
+        for(int i=0;i<n;i++){
+            int max=1;
+            for(int j=0;j<i;j++){
+                if(nums[i]>nums[j]){
+                    max=Math.max(max,dp[j]+1);
+                }
+            }
+            dp[i]=max;
+        }
+        int res=0;
+        for(int i=0;i<n;i++){
+            res=Math.max(res,dp[i]);
+        }
+        return res;
+    }
+}
+```
 
 
 
