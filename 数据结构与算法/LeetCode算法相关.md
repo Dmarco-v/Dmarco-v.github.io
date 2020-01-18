@@ -3215,9 +3215,19 @@ class Solution {
 }
 ```
 
+#376 最长摆动子序列
+
+描述：
 
 
 
+```java
+class Solution {
+    public int wiggleMaxLength(int[] nums) {
+        
+    }
+}
+```
 
 
 
