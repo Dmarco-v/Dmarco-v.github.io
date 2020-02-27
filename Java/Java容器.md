@@ -7,8 +7,7 @@
   - [2.Map](#2Map)
   
 - [二、源码分析](#二源码分析)
-
-  - [1.ArrayList](#1ArrayList)
+- [1.ArrayList](#1ArrayList)
   - [2.LinkedList](#2LinkedList)
   - [3.HashMap](#3HashMap)
   - [4.ConcurrentHashMap](#4ConcurrentHashMap)
