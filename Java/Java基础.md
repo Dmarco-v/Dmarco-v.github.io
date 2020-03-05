@@ -280,11 +280,6 @@ String最大的特点在于不可变。String被final修饰，因此不可被继
 
 使用new String("abc")方法会创建两个字符串对象，在String Pool中如果没有该字符串，则会创建一个，同时还会再堆中创建一个字符串对象。而使用str="abc"的方式，如果String Pool中已有该字符串，不会再创建新的对象，只是将str的引用指向字符串常量池中的"abc"字符串。
 
-#### 4.String和StringBuilder的底层实现
-
-- String。final char[]。 final修饰后当这个属性第一次被赋值后就不可以改变了，所以当我们拼接字符串的时候，每次拼接都会创建一个新的对象。
-- char[ ] ，StringBuilder底层数组默认长度是16，每次扩容后的数组长度为n*2+2，扩容后指针指向新数组，然后将原来数组内的数据复制到新的数组里。
-
 ## 六、异常
 
 ### 1.异常基础
@@ -324,7 +319,6 @@ Throwable 可以用来表示任何可以作为异常抛出的类，分为两种�
 ### 3. Throwable继承关系
 
 <div align="center"> <img src="./pics/1Throwable.png" width="600"/> </div><br>
-
 ### 4. 常用方法
 
 Exception和它的所有子类没有提供任何特殊方法供使用，它们的所有方法都是来自其基类Throwable。
