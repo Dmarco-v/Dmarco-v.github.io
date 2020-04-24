@@ -15,6 +15,9 @@ public class BusinessProcessManagement {
         int[][] prerequisites={{1,0},{2,0},{3,1},{3,2}};
         //输出：一种工作流的执行顺序
         int [] processOrder=findProcessOrder(numNodes,prerequisites);
+        for(int i:processOrder){
+            System.out.print(i+" ");
+        }
     }
 
     /**
